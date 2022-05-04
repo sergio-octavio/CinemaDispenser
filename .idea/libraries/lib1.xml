@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="lib1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/CinemaDispenser/lib/UrjcBankServer.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CinemaDispenser/lib/AbsoluteLayout.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CinemaDispenser/lib/CinemaTicketDispenserSimulator.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

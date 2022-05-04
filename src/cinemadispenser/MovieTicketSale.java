@@ -1,18 +1,11 @@
 package cinemadispenser;
 
 import java.io.IOException;
-import java.util.List;
 import sienens.CinemaTicketDispenser;
-import cinemadispenser.Theater;
-import cinemadispenser.Film;
-import java.lang.String;
-import static java.lang.System.exit;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
+import javax.naming.CommunicationException;
+import urjc.UrjcBankServer;
 
 /**
  * Gestiona la venta de un conjunto de entradas a un cliente.
@@ -40,6 +33,21 @@ public class MovieTicketSale extends Operation {
         return multiplex;
     }
 
+    public void doOperation() throws IOException, CommunicationException {
+
+        while (true) {
+            Theater theater = selectTheatre();
+            Session session = selectSession(theater);
+            ArrayList<Seat> seat = selectSeats(theater, session);
+            performPayment(theater, session, seat);
+
+            //SI SE PIDE COMPRAR PALOMITAS DESCOMENTAR ESTAS DOS LINEAS
+//            Popcorn popcorn = new Popcorn(dispenser, multiplex); 
+//            popcorn.doOperation();
+        }
+
+    }
+
     public MovieTicketSale(CinemaTicketDispenser dispenser, Multiplex multiplex) throws IOException {
         super(dispenser, multiplex);
         state = new MultiplexState();
@@ -51,16 +59,6 @@ public class MovieTicketSale extends Operation {
 //            }
         state.loadMoviesAndSessions();
         state.loadpartners();
-
-    }
-
-    public void doOperation() throws IOException {
-
-        while (true) {
-            Theater theater = selectTheatre();
-            Session session = selectSession(theater);
-            ArrayList<Seat> seat = selectSeats(theater, session);
-        }
 
     }
 
@@ -92,8 +90,8 @@ public class MovieTicketSale extends Operation {
         }
         char option = dispenser.waitEvent(30);
         int optionNum = convertiraNumero(option);
-        Session optionSessiopn = theater.getSession().get(optionNum);
-        return optionSessiopn;
+        Session optionSession = theater.getSession().get(optionNum);
+        return optionSession;
     }
 
     /**
@@ -107,22 +105,24 @@ public class MovieTicketSale extends Operation {
      * @throws IOException
      */
     private ArrayList<Seat> selectSeats(Theater theater, Session session) throws IOException {
+
+        MainMenu mainMenu = new MainMenu(dispenser, multiplex);
+
         borrarOpciones();
-        boolean exit = false; 
+        boolean exit = false;
         dispenser.setTitle("Seleccione butacas");
         presentSeats(theater, session);
         ArrayList<Seat> buyedSeats = new ArrayList<>();
+
         while (!exit) {
             char c = dispenser.waitEvent(30);
             if (c == 'A') { //cancelar
                 exit = true;
                 buyedSeats = null;
-
-            } else if (c == 'B') { //aceptar
-                borrarOpciones();
-                dispenser.setOption(0, "LA OPCION HA SIDO SELECCIONADA");
+                // COMPROBAR QUE AL SELECCIONAR EL BOTON DE ACEPTAR TIENE AL MENOS UNA BUTACA SELECCIONADA
+            } else if (c == 'B') {
                 exit = true;
-                
+
             } else if (c != 0) {
 
                 byte col = (byte) (c & 0xFF);
@@ -136,7 +136,6 @@ public class MovieTicketSale extends Operation {
                 } else if (buyedSeats.contains(selectedSeat)) {
 
                     dispenser.markSeat(row, col, 2);
-//                    dispenser.markSeat(selectedSeat.getCol()+ 1, selectedSeat.getRow() + 1, 2);
                     session.unocupiesSeat(row, col);
                     buyedSeats.remove(selectedSeat);
                 } else if (buyedSeats.size() == 4) {
@@ -144,7 +143,47 @@ public class MovieTicketSale extends Operation {
                 }
             }
         }
+
         return buyedSeats;
+    }
+
+    private boolean performPayment(Theater theater, Session session, ArrayList<Seat> seatsBuyed) throws IOException, CommunicationException {
+        boolean paymentCompleted = false;
+
+        if (!seatsBuyed.isEmpty()) { //SI SE SELECCIONA AL MENOS UNA BUTACA 
+            int totalPrice = computePrice(theater, seatsBuyed);
+
+            borrarOpciones();
+            dispenser.setTitle("INSERTE LA TARJETA DE CRÉDITO");
+            dispenser.setImage("./Poster/" + theater.getFilm().getPoster());
+            dispenser.setDescription(seatsBuyed.size() + " entradas para " + theater.getFilm().getName() + "." + "\n"
+                    + "Precio total: " + totalPrice + "€");
+            dispenser.setOption(4, "CANCELAR");
+            dispenser.setOption(5, "ACEPTAR");
+            char option = dispenser.waitEvent(30);
+
+            //MIRAR ESTE METODO PORQUE PUEDE QUE TODO ESTO ESTE DENTRO DE LA CLASE DE PerformPayment.doOperation(); 
+            boolean exit = false;
+
+            while (!exit) {
+                char c = dispenser.waitEvent(30);
+                
+                if (option == '1') { //si se inserta la tarjeta de credito
+                    exit = true;
+                    UrjcBankServer urjcBankServer = new UrjcBankServer();
+                    urjcBankServer.comunicationAvaiable();
+                    dispenser.expelCreditCard(totalPrice);
+                    
+                }
+                if (c == 'E') { //boton de cancelar
+                    exit = true;
+                    selectSeats(theater, session);// COMPROBAR QUE AL SELECCIONAR EL BOTON DE ACEPTAR TIENE AL MENOS UNA BUTACA SELECCIONADA
+                } else if (c == 'F') { //boton de aceptar
+                    exit = true;
+                }
+            }
+        }
+        return paymentCompleted;
     }
 
     private void presentSeats(Theater theater, Session session) throws IOException {
@@ -173,17 +212,23 @@ public class MovieTicketSale extends Operation {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    private boolean performPayment(Theater theater, Session session, ArrayList<Seat> seatsBuyed) {
-        boolean paymentCompleted = false;
-        if (seatsBuyed != null) {
-            int totalPrice = computePrice(theater, seatsBuyed);
-            PerformPayment.doOperation payment = new PerformPayment.doOperation(theater, session, seatsBuyed, totalPrice);
+    /**
+     * @Description: return full price of the seats
+     * @param theater
+     * @param seatsBuyed
+     * @return totalPrice
+     */
+    private int computePrice(Theater theater, ArrayList<Seat> seatsBuyed) {
+        int totalPrice = 0;
+        for (int i = 0; i < seatsBuyed.size(); i++) {
+            totalPrice = totalPrice + theater.getPrice();
         }
-        return paymentCompleted;
+        return totalPrice;
+
     }
 
-    private int computePrice(Theater theater, ArrayList<Seat> seatsBuyed) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void serializableMultiplexState() {
+
     }
 
     private int convertiraNumero(char opcion) {

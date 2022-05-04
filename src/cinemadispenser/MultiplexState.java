@@ -122,8 +122,6 @@ public class MultiplexState {
         
         FileReader fr = new FileReader("./Socios/Descuentos.txt");
         BufferedReader bf = new BufferedReader(fr);
-        
-        System.out.println("El fichero tiene " + bf.lines().count() + " lineas     ");
      
        
         InputStream ins = new FileInputStream("./Socios/Descuentos.txt");
@@ -133,11 +131,11 @@ public class MultiplexState {
         String socio3 = obj.nextLine();
         String socio4 = obj.nextLine();
         
-        
-        System.out.println("socio1   " + socio1);
-        System.out.println("socio2   " + socio2);
-        System.out.println("socio3   " + socio3);
-        System.out.println("socio4   " + socio4);
+//        
+//        System.out.println("socio1   " + socio1);
+//        System.out.println("socio2   " + socio2);
+//        System.out.println("socio3   " + socio3);
+//        System.out.println("socio4   " + socio4);
        
     }
 }

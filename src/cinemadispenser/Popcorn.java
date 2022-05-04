@@ -1,9 +1,7 @@
 package cinemadispenser;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import sienens.CinemaTicketDispenser;
-import urjc.UrjcBankServer;
 
 /**
  *
@@ -22,20 +20,54 @@ public class Popcorn extends Operation {
 
         int mode = 0;
         borrarOpciones();
-        dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("AÚN SE ESTÁN HACIENDO"));
-        dispenser.setDescription(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("LAS PALOMITAS ESTARÁN DISPONIBLES MÁS ADELANTE. DISCULPE LAS MOLESTIAS"));
-        dispenser.setOption(4, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("VOLVER"));
+        dispenser.setTitle("¿COMPRAR PALOMITAS?");
+        dispenser.setOption(0, "PALOMITAS");
+        dispenser.setOption(1, "SEGUIR COMPRANDO SIN PALOMITAS");
+        dispenser.setOption(2, "CANCELAR PEDIDO");
         while (true) {
 
-            char c = dispenser.waitEvent(30);
-            if (c == '1') {
-                dispenser.retainCreditCard(false);
-            } else if (c == 'E') {
-                if (mode == 0) {
-                    mainMenu.doOperation();
-                }
+            char opcion = dispenser.waitEvent(30);
+            switch (opcion) {
+                // opcion de CARTELERA    
+                case 'A':
+                    if (opcion == 'A') {
+                        if (mode == 0) {
+
+                            dispenser.setTitle("PALOMITAS");
+                            dispenser.setDescription("LAS PALOMITAS SE ESTÁN HACIENDO, COMPRE UNAS ENTRADAS PORQUE ESTO VA PARA LARGO... "
+                                    + "NOS HEMOS QUEDADO SIN PALOMITAS Y EL COMPAÑERO LAS HA IDO A COPRAR AL CHINO DE ABAJO");
+                            //comprar palomitas
+                            //si lo piden para el examen
+                            //HACER EL ALGORITMO DE COMPRA DE PALOMITAS
+                        }
+                    }
+                // opcion de PALOMITAS
+//                case 'B':
+//                    if (opcion == 'B') {
+//                        if (mode == 0) {
+//                            Popcorn popcorn = new Popcorn(dispenser, multiplex);
+//                            popcorn.doOperation();
+//                        }
+//                    }
+                    
+                    
+                // SEGUIR COMPRANDO SIN PALOMITAS
+                case 'B':
+                    if (opcion == 'B') {
+                        if (mode == 0) {
+                            mainMenu.doOperation();
+                        }
+                    }
+
+                    //CANCELAR PEDIDO
+                case 'C':
+                    if (opcion == 'C') {
+                        if (mode == 0) {
+                            mainMenu.doOperation();
+                        }
+                    }
             }
         }
-    }
 
+    }
 }

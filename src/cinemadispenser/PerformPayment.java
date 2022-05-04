@@ -1,5 +1,6 @@
 package cinemadispenser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import sienens.CinemaTicketDispenser;
 
@@ -7,7 +8,7 @@ import sienens.CinemaTicketDispenser;
  *
  * @author octavio
  */
-public class PerformPayment extends Operation {
+public class PerformPayment extends MovieTicketSale {
 
     public CinemaTicketDispenser getDispenser() {
         return dispenser;
@@ -17,22 +18,13 @@ public class PerformPayment extends Operation {
         return multiplex;
     }
 
-    void doOperation() {
+    public void doOperation(Theater theater, Session session, ArrayList<Seat> seatsBuyed) {
 
         borrarOpciones();
-        dispenser.setTitle("INSERTE LA TARJETA");
-        dispenser.waitEvent(30);
-
     }
 
-    public PerformPayment(CinemaTicketDispenser dispenser, Multiplex multiplex) {
+    public PerformPayment(CinemaTicketDispenser dispenser, Multiplex multiplex) throws IOException {
         super(dispenser, multiplex);
-    }
-
-    static class doOperation {
-
-        public doOperation(Theater theater, Session session, ArrayList<Seat> seatsBuyed, int totalPrice) {
-        }
     }
 
 }
