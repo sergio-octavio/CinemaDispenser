@@ -2,6 +2,7 @@ package cinemadispenser;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import javax.naming.CommunicationException;
 import sienens.CinemaTicketDispenser;
 
 /**
@@ -18,7 +19,7 @@ public class MainMenu extends Operation {
         super(dispenser, multiplex);
     }
 
-    void doOperation() throws FileNotFoundException, IOException {
+    public void doOperation() throws IOException, CommunicationException {
 
         MovieTicketSale movieTicketSale = new MovieTicketSale(dispenser, multiplex);
         IdiomSelection idiomSelection = new IdiomSelection(dispenser, multiplex);

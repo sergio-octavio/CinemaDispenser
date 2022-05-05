@@ -2,6 +2,7 @@ package cinemadispenser;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import javax.naming.CommunicationException;
 
 /**
  *
@@ -15,7 +16,7 @@ public class CinemaDispenser {
      * @param args the command line arguments
      * @throws java.io.FileNotFoundException
      */
-    public static void main(String[] args) throws FileNotFoundException, IOException {
+    public static void main(String[] args) throws FileNotFoundException, IOException, CommunicationException {
         Multiplex multiplex = new Multiplex();
         multiplex.start();
         

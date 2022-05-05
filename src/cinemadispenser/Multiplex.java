@@ -2,6 +2,7 @@ package cinemadispenser;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import javax.naming.CommunicationException;
 import sienens.CinemaTicketDispenser;
 
 /**
@@ -24,7 +25,7 @@ class Multiplex {
         this.Idiom = Idiom;
     }
 
-    void start() throws FileNotFoundException, IOException {
+    void start() throws FileNotFoundException, IOException, CommunicationException {
         CinemaTicketDispenser dispenser = new CinemaTicketDispenser();
         Multiplex multiplex = new Multiplex();
 

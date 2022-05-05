@@ -3,9 +3,9 @@ package cinemadispenser;
 import java.io.IOException;
 import sienens.CinemaTicketDispenser;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import javax.naming.CommunicationException;
-import urjc.UrjcBankServer;
 
 /**
  * Gestiona la venta de un conjunto de entradas a un cliente.
@@ -14,6 +14,20 @@ import urjc.UrjcBankServer;
  *
  */
 public class MovieTicketSale extends Operation {
+
+    public MovieTicketSale(CinemaTicketDispenser dispenser, Multiplex multiplex) throws IOException,CommunicationException {
+        super(dispenser, multiplex);
+        state = new MultiplexState();
+
+//        if (esun nuevo dia){
+//        state = new MultiplexState();
+//    } else{
+//            state = desserializeMultiplzState(); 
+//            }
+        state.loadMoviesAndSessions();
+        state.loadpartners();
+
+    }
 
     private MultiplexState state;
 
@@ -35,31 +49,25 @@ public class MovieTicketSale extends Operation {
 
     public void doOperation() throws IOException, CommunicationException {
 
-        while (true) {
-            Theater theater = selectTheatre();
-            Session session = selectSession(theater);
-            ArrayList<Seat> seat = selectSeats(theater, session);
-            performPayment(theater, session, seat);
+        Theater theater = selectTheatre();
+        Session session = selectSession(theater);
+        ArrayList<Seat> seat = selectSeats(theater, session);
+        int totalPrice = computePrice(theater, seat);
 
-            //SI SE PIDE COMPRAR PALOMITAS DESCOMENTAR ESTAS DOS LINEAS
-//            Popcorn popcorn = new Popcorn(dispenser, multiplex); 
-//            popcorn.doOperation();
+        if (seat.size() > 0) { //si se ha seleccionado al menos una entrada... 
+            PerformPayment performPayment = new PerformPayment(dispenser, multiplex, totalPrice);
+            String mensaje = (seat.size() + " entradas para " + theater.getFilm().getName() + "." + "\n" + "Precio total: " + totalPrice + "€");
+            performPayment.doOperation(mensaje);
+
+//            serializeMultiplexstate(); //guarda el proceso 
+            printTicket(theater, seat, session);
+
+            
+            dispenser.print(printTicket(theater, seat, session));
+
+        } else {
+            doOperation();
         }
-
-    }
-
-    public MovieTicketSale(CinemaTicketDispenser dispenser, Multiplex multiplex) throws IOException {
-        super(dispenser, multiplex);
-        state = new MultiplexState();
-
-//        if (esun nuevo dia){
-//        state = new MultiplexState();
-//    } else{
-//            state = desserializeMultiplzState(); 
-//            }
-        state.loadMoviesAndSessions();
-        state.loadpartners();
-
     }
 
     private Theater selectTheatre() {
@@ -79,7 +87,6 @@ public class MovieTicketSale extends Operation {
     }
 
     private Session selectSession(Theater theater) {
-
         borrarOpciones();
         dispenser.setTitle("Seleccione sesión");
         dispenser.setImage("./Poster/" + theater.getFilm().getPoster());
@@ -147,45 +154,6 @@ public class MovieTicketSale extends Operation {
         return buyedSeats;
     }
 
-    private boolean performPayment(Theater theater, Session session, ArrayList<Seat> seatsBuyed) throws IOException, CommunicationException {
-        boolean paymentCompleted = false;
-
-        if (!seatsBuyed.isEmpty()) { //SI SE SELECCIONA AL MENOS UNA BUTACA 
-            int totalPrice = computePrice(theater, seatsBuyed);
-
-            borrarOpciones();
-            dispenser.setTitle("INSERTE LA TARJETA DE CRÉDITO");
-            dispenser.setImage("./Poster/" + theater.getFilm().getPoster());
-            dispenser.setDescription(seatsBuyed.size() + " entradas para " + theater.getFilm().getName() + "." + "\n"
-                    + "Precio total: " + totalPrice + "€");
-            dispenser.setOption(4, "CANCELAR");
-            dispenser.setOption(5, "ACEPTAR");
-            char option = dispenser.waitEvent(30);
-
-            //MIRAR ESTE METODO PORQUE PUEDE QUE TODO ESTO ESTE DENTRO DE LA CLASE DE PerformPayment.doOperation(); 
-            boolean exit = false;
-
-            while (!exit) {
-                char c = dispenser.waitEvent(30);
-                
-                if (option == '1') { //si se inserta la tarjeta de credito
-                    exit = true;
-                    UrjcBankServer urjcBankServer = new UrjcBankServer();
-                    urjcBankServer.comunicationAvaiable();
-                    dispenser.expelCreditCard(totalPrice);
-                    
-                }
-                if (c == 'E') { //boton de cancelar
-                    exit = true;
-                    selectSeats(theater, session);// COMPROBAR QUE AL SELECCIONAR EL BOTON DE ACEPTAR TIENE AL MENOS UNA BUTACA SELECCIONADA
-                } else if (c == 'F') { //boton de aceptar
-                    exit = true;
-                }
-            }
-        }
-        return paymentCompleted;
-    }
-
     private void presentSeats(Theater theater, Session session) throws IOException {
         int maxRows = theater.getMaxRows();
         int maxCols = theater.getMaxCols();
@@ -208,10 +176,6 @@ public class MovieTicketSale extends Operation {
         dispenser.setOption(1, "ACEPTAR");
     }
 
-    private Seat getSeatSelect(char option) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
     /**
      * @Description: return full price of the seats
      * @param theater
@@ -224,15 +188,9 @@ public class MovieTicketSale extends Operation {
             totalPrice = totalPrice + theater.getPrice();
         }
         return totalPrice;
-
-    }
-
-    public void serializableMultiplexState() {
-
     }
 
     private int convertiraNumero(char opcion) {
-
         switch (opcion) {
             case 'A':
                 return 0;
@@ -245,5 +203,37 @@ public class MovieTicketSale extends Operation {
             default:
                 return -1;
         }
+    }
+
+    private void serializeMultiplexstate() {
+
+    }
+
+    /**
+     * Description: Method to print ticket
+     *
+     * @param theater
+     * @param seat
+     * @param session
+     */
+    private List<String> printTicket(Theater theater, ArrayList<Seat> seat, Session session) {
+
+        List<String> text = new ArrayList<>();
+        text.add("   Entrada para " + theater.getFilm().getName());
+        text.add("   ===================");
+        text.add("   Sala " + theater.getNumber());
+        text.add("   Hora " + session.getHour());
+        
+        int countSeat = 0;
+        int countRow = 0;
+        for (int i = 0; i < seat.size(); i++) {
+            countSeat = countSeat + seat.get(i).getCol();
+            countRow = countRow + seat.get(i).getRow();
+            text.add("   Fila " + countRow + "-- Asiento " + countSeat);
+        }
+        int totalPrice = computePrice(theater, seat);
+        text.add("   Precio " + totalPrice + "€" );
+        
+        return text;
     }
 }
