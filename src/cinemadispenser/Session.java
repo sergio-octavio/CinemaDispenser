@@ -42,8 +42,9 @@ public class Session implements Serializable {
 
       public boolean isOccupied(int row, int col){
         //indicar si es alsiento es ocupado o no
-        return false;
-        //indicar si es alsiento es ocupado o no
+        Seat seat = new Seat(row, col);
+        
+        return occupiedSeatSet.contains(seat);
         
     }
 

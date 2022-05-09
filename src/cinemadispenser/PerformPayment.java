@@ -44,39 +44,13 @@ public class PerformPayment extends MovieTicketSale {
                 UrjcBankServer urjcBankServer = new UrjcBankServer();
                 urjcBankServer.comunicationAvaiable();
                 urjcBankServer.doOperation(dispenser.getCardNumber(), totalPrice);
-                dispenser.expelCreditCard(30); 
+                dispenser.expelCreditCard(30);
                 break;
-
-            }
-            if (option == 'E') { //boton de cancelar
+            } else if (option == 'E') { //boton de cancelar
                 exit = true;
-                selectSeats(theater, session);// COMPROBAR QUE AL SELECCIONAR EL BOTON DE ACEPTAR TIENE AL MENOS UNA BUTACA SELECCIONADA
-            } else if (option == 'F') { //boton de aceptar
-                exit = true;
+                MovieTicketSale movieTicketSale = new MovieTicketSale(dispenser, multiplex);
+                movieTicketSale.doOperation();
             }
         }
-
     }
-
-    public void printTicket() {
-          //metodo para imprimir los tickets.
-        List<String> text = new ArrayList<>();
-        text.add("   Entrada para " + theater.getFilm().getName());
-        text.add("   ===================");
-        text.add("   Sala " + theater.getNumber());
-        text.add("   Hora " + session.getHour());
-        
-        int countSeatAndRow = 0;
-        for (int i = 0; i < seat.size(); i++) {
-            countSeatAndRow = countSeatAndRow + seat.get(i).getCol();
-        }
-        
-        
-        text.add("   Fila " + session.getOccupiedSeatSet());
-        text.add("   Asiento 14");
-        text.add("   Precio 9€");
-
-        dispenser.print(text);
-    }
-
 }

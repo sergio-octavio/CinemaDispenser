@@ -23,7 +23,7 @@ import java.util.Scanner;
  *
  * @author octavio
  */
-public class MultiplexState {
+public class MultiplexState implements Serializable{
 
     private List<Theater> theaterList = new ArrayList<>();
 

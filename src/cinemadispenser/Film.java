@@ -3,7 +3,7 @@ package cinemadispenser;
 /**
  * @author octavio
  */
-class Film {
+class Film implements Serializable{
 
     private String name;
     private String poster;

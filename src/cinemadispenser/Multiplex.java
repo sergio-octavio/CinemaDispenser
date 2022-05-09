@@ -25,7 +25,7 @@ class Multiplex {
         this.Idiom = Idiom;
     }
 
-    void start() throws FileNotFoundException, IOException, CommunicationException {
+    public void start() throws FileNotFoundException, IOException, CommunicationException {
         CinemaTicketDispenser dispenser = new CinemaTicketDispenser();
         Multiplex multiplex = new Multiplex();
 

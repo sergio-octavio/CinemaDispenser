@@ -4,7 +4,7 @@ package cinemadispenser;
  *
  * @author octavio
  */
-class Seat implements Cloneable {
+class Seat implements Serializable {
 
     private int row;
     private int col;

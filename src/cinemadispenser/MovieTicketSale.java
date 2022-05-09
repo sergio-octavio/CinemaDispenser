@@ -1,6 +1,11 @@
 package cinemadispenser;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import sienens.CinemaTicketDispenser;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,15 +20,17 @@ import javax.naming.CommunicationException;
  */
 public class MovieTicketSale extends Operation {
 
-    public MovieTicketSale(CinemaTicketDispenser dispenser, Multiplex multiplex) throws IOException,CommunicationException {
+    public MovieTicketSale(CinemaTicketDispenser dispenser, Multiplex multiplex) throws IOException, CommunicationException {
         super(dispenser, multiplex);
         state = new MultiplexState();
 
 //        if (esun nuevo dia){
 //        state = new MultiplexState();
 //    } else{
-//            state = desserializeMultiplzState(); 
+//            state = desserializeMultiplzState();
 //            }
+
+
         state.loadMoviesAndSessions();
         state.loadpartners();
 
@@ -49,24 +56,31 @@ public class MovieTicketSale extends Operation {
 
     public void doOperation() throws IOException, CommunicationException {
 
+        //hacer la comprobacion si es un nuevo dia para cargas las peliculas o no
+        // if(es nuevo dia){
+        // create new empty state
+        // } else {
+        // load serialized state }
         Theater theater = selectTheatre();
         Session session = selectSession(theater);
         ArrayList<Seat> seat = selectSeats(theater, session);
-        int totalPrice = computePrice(theater, seat);
-
-        if (seat.size() > 0) { //si se ha seleccionado al menos una entrada... 
+        //comprobar si se pula en cancelar cuando estamos en la pantalla de seleccionar las butacas
+        if (seat.size() > 0) { //si se ha seleccionado al menos una entrada...
+            int totalPrice = computePrice(theater, seat);
             PerformPayment performPayment = new PerformPayment(dispenser, multiplex, totalPrice);
             String mensaje = (seat.size() + " entradas para " + theater.getFilm().getName() + "." + "\n" + "Precio total: " + totalPrice + "€");
             performPayment.doOperation(mensaje);
 
-//            serializeMultiplexstate(); //guarda el proceso 
-            printTicket(theater, seat, session);
+            serializeMultiplexstate(); //guarda el proceso SERIALIZABLE
+            printTicket(theater, seat, session); //metodo para generar el Ticket
 
-            
             dispenser.print(printTicket(theater, seat, session));
+            dispenser.setTitle("RECOJA LA TARJETA DE CRÉDITO");
+            dispenser.expelCreditCard(30);
 
         } else {
-            doOperation();
+            MainMenu mainMenu = new MainMenu(dispenser, multiplex);
+            mainMenu.doOperation();
         }
     }
 
@@ -184,9 +198,11 @@ public class MovieTicketSale extends Operation {
      */
     private int computePrice(Theater theater, ArrayList<Seat> seatsBuyed) {
         int totalPrice = 0;
+
         for (int i = 0; i < seatsBuyed.size(); i++) {
             totalPrice = totalPrice + theater.getPrice();
         }
+
         return totalPrice;
     }
 
@@ -205,10 +221,6 @@ public class MovieTicketSale extends Operation {
         }
     }
 
-    private void serializeMultiplexstate() {
-
-    }
-
     /**
      * Description: Method to print ticket
      *
@@ -223,7 +235,6 @@ public class MovieTicketSale extends Operation {
         text.add("   ===================");
         text.add("   Sala " + theater.getNumber());
         text.add("   Hora " + session.getHour());
-        
         int countSeat = 0;
         int countRow = 0;
         for (int i = 0; i < seat.size(); i++) {
@@ -232,8 +243,24 @@ public class MovieTicketSale extends Operation {
             text.add("   Fila " + countRow + "-- Asiento " + countSeat);
         }
         int totalPrice = computePrice(theater, seat);
-        text.add("   Precio " + totalPrice + "€" );
-        
+        text.add("   Precio " + totalPrice + "€");
+
         return text;
+    }
+
+    public void serializeMultiplexstate() {
+
+        //en este metodo tendremos que meter lo que queramos que se guqarde a disco 
+        try {
+
+            String ficheroSerializable = "./ficheros/serializable.ser";
+            ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(ficheroSerializable));
+            salida.writeObject(state);
+            salida.close();
+
+           
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }
