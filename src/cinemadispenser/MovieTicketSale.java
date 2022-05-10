@@ -29,8 +29,6 @@ public class MovieTicketSale extends Operation {
 //    } else{
 //            state = desserializeMultiplzState();
 //            }
-
-
         state.loadMoviesAndSessions();
         state.loadpartners();
 
@@ -173,16 +171,18 @@ public class MovieTicketSale extends Operation {
         int maxCols = theater.getMaxCols();
         Set<Seat> seatSet = theater.getSeatSet();
         dispenser.setTheaterMode(maxRows, maxCols);
+        session.getOccupiedSeatSet();
         for (int row = 0; row < maxRows; row++) {
-            for (int colum = 0; colum < maxCols; colum++) {
-                if (seatSet.contains(new Seat(row, colum))) {
-                    if (session.isOccupied(row, colum)) {
-                        dispenser.markSeat(row + 1, colum + 1, 1);
+            for (int col = 0; col < maxCols; col++) {
+
+                if (seatSet.contains(new Seat(row, col))) {
+                    if (session.isOccupied(row+1, col+1)) { //CORREGIDO! se le suma a 1 row y col para que cuadre bien al marcarlo
+                        dispenser.markSeat(row + 1, col + 1, 1); //OCCUPIED SEAT
                     } else {
-                        dispenser.markSeat(row + 1, colum + 1, 2);
+                        dispenser.markSeat(row + 1, col + 1, 2); //UNOCCUPIED SEAT
                     }
                 } else {
-                    dispenser.markSeat(row + 1, colum + 1, 0);
+                    dispenser.markSeat(row + 1, col + 1, 0);  //NOT A SEAT (empty space for corridors)
                 }
             }
         }
@@ -258,7 +258,6 @@ public class MovieTicketSale extends Operation {
             salida.writeObject(state);
             salida.close();
 
-           
         } catch (Exception e) {
             System.out.println(e);
         }
