@@ -13,7 +13,7 @@ import sienens.CinemaTicketDispenser;
  * @author octavio
  *
  */
-class Multiplex {
+public class Multiplex {
 
     private String Idiom;
 

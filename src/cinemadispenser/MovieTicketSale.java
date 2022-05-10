@@ -238,9 +238,9 @@ public class MovieTicketSale extends Operation {
         int countSeat = 0;
         int countRow = 0;
         for (int i = 0; i < seat.size(); i++) {
-            countSeat = countSeat + seat.get(i).getCol();
-            countRow = countRow + seat.get(i).getRow();
-            text.add("   Fila " + countRow + "-- Asiento " + countSeat);
+            countSeat = seat.get(i).getCol();
+            countRow = seat.get(i).getRow();
+            text.add("   Fila " + countRow + " - Butaca " + countSeat);
         }
         int totalPrice = computePrice(theater, seat);
         text.add("   Precio " + totalPrice + "€");
