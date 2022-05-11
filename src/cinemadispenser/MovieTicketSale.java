@@ -52,18 +52,21 @@ public class MovieTicketSale extends Operation {
         return multiplex;
     }
 
+    private String optionMenuSeats;
+
     public void doOperation() throws IOException, CommunicationException {
 
-        //hacer la comprobacion si es un nuevo dia para cargas las peliculas o no
-        // if(es nuevo dia){
-        // create new empty state
-        // } else {
-        // load serialized state }
+        //¿ES UN NUEVO DIA????? 
+       // newDay(); //LLAMAR AL METODO DE NUEVO DIA
+        
         Theater theater = selectTheatre();
         Session session = selectSession(theater);
         ArrayList<Seat> seat = selectSeats(theater, session);
         //comprobar si se pula en cancelar cuando estamos en la pantalla de seleccionar las butacas
-        if (seat.size() > 0) { //si se ha seleccionado al menos una entrada...
+        if (optionMenuSeats == "CANCEL") {
+            MainMenu mainMenu = new MainMenu(dispenser, multiplex);
+            mainMenu.doOperation();
+        } else if (seat.size() > 0) {  //si se ha seleccionado al menos una entrada...
             int totalPrice = computePrice(theater, seat);
             PerformPayment performPayment = new PerformPayment(dispenser, multiplex, totalPrice);
             String mensaje = (seat.size() + " entradas para " + theater.getFilm().getName() + "." + "\n" + "Precio total: " + totalPrice + "€");
@@ -76,9 +79,6 @@ public class MovieTicketSale extends Operation {
             dispenser.setTitle("RECOJA LA TARJETA DE CRÉDITO");
             dispenser.expelCreditCard(30);
 
-        } else {
-            MainMenu mainMenu = new MainMenu(dispenser, multiplex);
-            mainMenu.doOperation();
         }
     }
 
@@ -138,6 +138,7 @@ public class MovieTicketSale extends Operation {
             if (c == 'A') { //cancelar
                 exit = true;
                 buyedSeats = null;
+                optionMenuSeats = "CANCEL";
                 // COMPROBAR QUE AL SELECCIONAR EL BOTON DE ACEPTAR TIENE AL MENOS UNA BUTACA SELECCIONADA
             } else if (c == 'B') {
                 exit = true;
@@ -176,7 +177,7 @@ public class MovieTicketSale extends Operation {
             for (int col = 0; col < maxCols; col++) {
 
                 if (seatSet.contains(new Seat(row, col))) {
-                    if (session.isOccupied(row+1, col+1)) { //CORREGIDO! se le suma a 1 row y col para que cuadre bien al marcarlo
+                    if (session.isOccupied(row + 1, col + 1)) { //CORREGIDO! se le suma a 1 row y col para que cuadre bien al marcarlo
                         dispenser.markSeat(row + 1, col + 1, 1); //OCCUPIED SEAT
                     } else {
                         dispenser.markSeat(row + 1, col + 1, 2); //UNOCCUPIED SEAT
@@ -240,7 +241,7 @@ public class MovieTicketSale extends Operation {
         for (int i = 0; i < seat.size(); i++) {
             countSeat = seat.get(i).getCol();
             countRow = seat.get(i).getRow();
-            text.add("   Fila " + countRow + " - Butaca " + countSeat);
+            text.add("   Fila " + countRow + " - Butaca " + countSeat + " - Precio: " + theater.getPrice() + "€");
         }
         int totalPrice = computePrice(theater, seat);
         text.add("   Precio " + totalPrice + "€");
@@ -262,4 +263,33 @@ public class MovieTicketSale extends Operation {
             System.out.println(e);
         }
     }
-}
+
+    private void newDay() {
+        
+        while (true) {
+
+            borrarOpciones();
+
+            dispenser.setTitle("¿ES UN NUEVO DIA?");
+            dispenser.setOption(0, "SÍ");
+            dispenser.setOption(0, "NO");
+            
+            char opcion = dispenser.waitEvent(30);
+            switch (opcion) {
+                // opcion de CARTELERA    
+                case 'A':
+                    
+//                 opcion de PALOMITAS
+                case 'B':
+                    Serializable serializable = new Serializable() {};
+                    serializable.
+
+                
+                    
+    }}}}
+        //hacer la comprobacion si es un nuevo dia para cargas las peliculas o no
+        // if(es nuevo dia){
+        // create new empty state
+        // } else {
+        // load serialized state }}
+
