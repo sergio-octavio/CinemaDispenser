@@ -1,6 +1,5 @@
 package cinemadispenser;
 
-import cinemadispenser.Pair;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,8 +12,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.lang.String;
 import java.util.Scanner;
 
 /**
@@ -23,7 +20,7 @@ import java.util.Scanner;
  *
  * @author octavio
  */
-public class MultiplexState implements Serializable{
+public class MultiplexState implements Serializable {
 
     private List<Theater> theaterList = new ArrayList<>();
 
@@ -118,24 +115,51 @@ public class MultiplexState implements Serializable{
      * @param pathNameSocios directorio donde se encuentra los ficheros de los
      * socios del cine.
      */
-    public void loadpartners() throws IOException {
-        
-        FileReader fr = new FileReader("./Socios/Descuentos.txt");
-        BufferedReader bf = new BufferedReader(fr);
-     
-       
-        InputStream ins = new FileInputStream("./Socios/Descuentos.txt");
-        Scanner obj = new Scanner(ins);
-        String socio1 = obj.nextLine();
-        String socio2 = obj.nextLine();
-        String socio3 = obj.nextLine();
-        String socio4 = obj.nextLine();
-        
-//        
-//        System.out.println("socio1   " + socio1);
-//        System.out.println("socio2   " + socio2);
-//        System.out.println("socio3   " + socio3);
-//        System.out.println("socio4   " + socio4);
-       
-    }
+//    public List<Socios> loadpartners() throws IOException {
+//
+//        File archivo = null;
+//        FileReader fr = null;
+//        BufferedReader br = null;
+//
+//        try {
+//            // Apertura del fichero y creacion de BufferedReader para poder
+//            // hacer una lectura comoda (disponer del metodo readLine()).
+//            archivo = new File("./Socios/Descuentos.txt");
+//            fr = new FileReader(archivo);
+//            br = new BufferedReader(fr);
+//
+//            // Lectura del fichero
+//            String linea;
+//
+//            String separador = null;
+//            ArrayList<Socios> listPartners = new ArrayList<>();
+//
+//            while ((linea = br.readLine()) != null) {
+//                linea = String.valueOf(listPartners.size());
+//
+//                Integer partner = null;
+//
+//                for (int i = 0; i < listPartners.size(); i++) {
+//                    separador.split("Socio:");
+//                    listPartners.add(linea);
+//                }
+//            }
+//
+//            System.out.println(linea);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            // En el finally cerramos el fichero, para asegurarnos
+//            // que se cierra tanto si todo va bien como si salta 
+//            // una excepcion.
+//            try {
+//                if (null != fr) {
+//                    fr.close();
+//                }
+//            } catch (Exception e2) {
+//                e2.printStackTrace();
+//            }
+//        }
+//    }
 }
+

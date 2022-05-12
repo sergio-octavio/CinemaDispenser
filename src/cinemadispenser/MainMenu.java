@@ -33,6 +33,7 @@ public class MainMenu extends Operation {
             dispenser.setOption(0, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CARTELERA"));
             dispenser.setOption(1, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("PALOMITAS"));
             dispenser.setOption(2, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CAMBIAR IDIOMA"));
+           
 
             char opcion = dispenser.waitEvent(30);
             switch (opcion) {
@@ -59,6 +60,8 @@ public class MainMenu extends Operation {
                             idiomSelection.doOperation();
                         }
                     }
+                
+                   
             }
         }
     }

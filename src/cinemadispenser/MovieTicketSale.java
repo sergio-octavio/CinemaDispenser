@@ -1,9 +1,6 @@
 package cinemadispenser;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import sienens.CinemaTicketDispenser;
@@ -23,15 +20,8 @@ public class MovieTicketSale extends Operation {
     public MovieTicketSale(CinemaTicketDispenser dispenser, Multiplex multiplex) throws IOException, CommunicationException {
         super(dispenser, multiplex);
         state = new MultiplexState();
-
-//        if (esun nuevo dia){
-//        state = new MultiplexState();
-//    } else{
-//            state = desserializeMultiplzState();
-//            }
         state.loadMoviesAndSessions();
-        state.loadpartners();
-
+        
     }
 
     private MultiplexState state;
@@ -53,12 +43,17 @@ public class MovieTicketSale extends Operation {
     }
 
     private String optionMenuSeats;
+    private Boolean isNewDayState;
 
     public void doOperation() throws IOException, CommunicationException {
 
-        //¿ES UN NUEVO DIA????? 
-       // newDay(); //LLAMAR AL METODO DE NUEVO DIA
-        
+        newDay(multiplex);
+
+//hacer la comprobacion si es un nuevo dia para cargar las peliculas o no
+//         if(es nuevo dia){
+//         create new empty state
+//         } else {
+//         load serialized state }}
         Theater theater = selectTheatre();
         Session session = selectSession(theater);
         ArrayList<Seat> seat = selectSeats(theater, session);
@@ -80,6 +75,7 @@ public class MovieTicketSale extends Operation {
             dispenser.expelCreditCard(30);
 
         }
+
     }
 
     private Theater selectTheatre() {
@@ -264,32 +260,28 @@ public class MovieTicketSale extends Operation {
         }
     }
 
-    private void newDay() {
-        
-        while (true) {
+    public boolean newDay(Multiplex multiplex) throws IOException, CommunicationException {
 
-            borrarOpciones();
+        borrarOpciones();
 
-            dispenser.setTitle("¿ES UN NUEVO DIA?");
-            dispenser.setOption(0, "SÍ");
-            dispenser.setOption(0, "NO");
+        dispenser.setTitle("¿ES UN NUEVO DIA?");
+        dispenser.setOption(0, "SÍ");
+        dispenser.setOption(1, "NO");
+
+        char option = dispenser.waitEvent(30);
+
+        if (option == 'A') {
+            Socios socios = new Socios();
             
-            char opcion = dispenser.waitEvent(30);
-            switch (opcion) {
-                // opcion de CARTELERA    
-                case 'A':
-                    
-//                 opcion de PALOMITAS
-                case 'B':
-                    Serializable serializable = new Serializable() {};
-                    serializable.
-
-                
-                    
-    }}}}
-        //hacer la comprobacion si es un nuevo dia para cargas las peliculas o no
-        // if(es nuevo dia){
-        // create new empty state
-        // } else {
-        // load serialized state }}
-
+            state = new MultiplexState();
+            state.loadMoviesAndSessions();
+//            state.loadpartners();
+            socios.loadPartners();
+            isNewDayState = true;
+            
+        } else if (option == 'B') {
+            isNewDayState = false;
+        }
+        return isNewDayState;
+    }
+}
