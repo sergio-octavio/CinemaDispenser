@@ -1,18 +1,13 @@
 package cinemadispenser;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Agrupa el estado del multicines. Al ser esta clase serializable, se podría
@@ -105,61 +100,5 @@ public class MultiplexState implements Serializable {
             theaterList.add(theater);
         }
     }
-
-    /**
-     * CARGA DE LOS SOCIOS DEL CINE A TRAVES DEL FICHERO DE TEXTO LLAMADO
-     * Socios/Descuentos.txt
-     *
-     */
-    /**
-     * @param pathNameSocios directorio donde se encuentra los ficheros de los
-     * socios del cine.
-     */
-//    public List<Socios> loadpartners() throws IOException {
-//
-//        File archivo = null;
-//        FileReader fr = null;
-//        BufferedReader br = null;
-//
-//        try {
-//            // Apertura del fichero y creacion de BufferedReader para poder
-//            // hacer una lectura comoda (disponer del metodo readLine()).
-//            archivo = new File("./Socios/Descuentos.txt");
-//            fr = new FileReader(archivo);
-//            br = new BufferedReader(fr);
-//
-//            // Lectura del fichero
-//            String linea;
-//
-//            String separador = null;
-//            ArrayList<Socios> listPartners = new ArrayList<>();
-//
-//            while ((linea = br.readLine()) != null) {
-//                linea = String.valueOf(listPartners.size());
-//
-//                Integer partner = null;
-//
-//                for (int i = 0; i < listPartners.size(); i++) {
-//                    separador.split("Socio:");
-//                    listPartners.add(linea);
-//                }
-//            }
-//
-//            System.out.println(linea);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            // En el finally cerramos el fichero, para asegurarnos
-//            // que se cierra tanto si todo va bien como si salta 
-//            // una excepcion.
-//            try {
-//                if (null != fr) {
-//                    fr.close();
-//                }
-//            } catch (Exception e2) {
-//                e2.printStackTrace();
-//            }
-//        }
-//    }
 }
 

@@ -1,6 +1,10 @@
 package cinemadispenser;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import sienens.CinemaTicketDispenser;
@@ -21,7 +25,7 @@ public class MovieTicketSale extends Operation {
         super(dispenser, multiplex);
         state = new MultiplexState();
         state.loadMoviesAndSessions();
-        
+
     }
 
     private MultiplexState state;
@@ -48,6 +52,7 @@ public class MovieTicketSale extends Operation {
     public void doOperation() throws IOException, CommunicationException {
 
         newDay(multiplex);
+        ArrayList<String> socios = loadPartners();
 
 //hacer la comprobacion si es un nuevo dia para cargar las peliculas o no
 //         if(es nuevo dia){
@@ -73,11 +78,8 @@ public class MovieTicketSale extends Operation {
             dispenser.print(printTicket(theater, seat, session));
             dispenser.setTitle("RECOJA LA TARJETA DE CRÉDITO");
             dispenser.expelCreditCard(30);
-
         }
-
     }
-
     private Theater selectTheatre() {
         borrarOpciones();
         //imprimimos las peliculas por pantalla
@@ -159,7 +161,6 @@ public class MovieTicketSale extends Operation {
                 }
             }
         }
-
         return buyedSeats;
     }
 
@@ -199,7 +200,6 @@ public class MovieTicketSale extends Operation {
         for (int i = 0; i < seatsBuyed.size(); i++) {
             totalPrice = totalPrice + theater.getPrice();
         }
-
         return totalPrice;
     }
 
@@ -271,17 +271,47 @@ public class MovieTicketSale extends Operation {
         char option = dispenser.waitEvent(30);
 
         if (option == 'A') {
+
             Socios socios = new Socios();
-            
             state = new MultiplexState();
             state.loadMoviesAndSessions();
 //            state.loadpartners();
-            socios.loadPartners();
+            //loadPartners();
             isNewDayState = true;
-            
+
         } else if (option == 'B') {
             isNewDayState = false;
         }
         return isNewDayState;
     }
+
+    private ArrayList<String> loadPartners() throws FileNotFoundException {
+        File archivo = new File("./Socios/Descuentos.txt");
+        FileReader fr = new FileReader(archivo);
+        BufferedReader br = new BufferedReader(fr);
+
+        ArrayList<String> listPartner = new ArrayList<String>();
+
+        try {
+            // Lectura del fichero
+            String linea;
+            while ((linea = br.readLine()) != null) {
+
+                String[] textoSeparado = linea.split("Socio:");
+                listPartner.add(textoSeparado[1]);
+            }
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
+        } finally {
+            try {
+                if (fr != null) {
+                    fr.close();
+                }
+            } catch (IOException e2) {
+                e2.printStackTrace(System.out);
+            }
+        }
+        return listPartner;
+    }
+
 }
