@@ -71,7 +71,14 @@ public class MovieTicketSale extends Operation {
             PerformPayment performPayment = new PerformPayment(dispenser, multiplex, totalPrice);
             String mensaje = (seat.size() + " entradas para " + theater.getFilm().getName() + "." + "\n" + "Precio total: " + totalPrice + "€");
             performPayment.doOperation(mensaje);
+            //comprobar el numero de socio
+            if (comprobarTarjeta(socios) == true){
+                totalPrice = (int) (totalPrice - (totalPrice*0.3));
+            }
+            System.out.println(totalPrice);
+            //checkMembershipNumber(theater, seat, socios);
 
+            //mostrar el precio de descuento 
             serializeMultiplexstate(); //guarda el proceso SERIALIZABLE
             printTicket(theater, seat, session); //metodo para generar el Ticket
 
@@ -80,6 +87,7 @@ public class MovieTicketSale extends Operation {
             dispenser.expelCreditCard(30);
         }
     }
+
     private Theater selectTheatre() {
         borrarOpciones();
         //imprimimos las peliculas por pantalla
@@ -194,13 +202,27 @@ public class MovieTicketSale extends Operation {
      * @param seatsBuyed
      * @return totalPrice
      */
-    private int computePrice(Theater theater, ArrayList<Seat> seatsBuyed) {
+    private int computePrice(Theater theater, ArrayList<Seat> seatsBuyed) throws FileNotFoundException {
         int totalPrice = 0;
-
         for (int i = 0; i < seatsBuyed.size(); i++) {
             totalPrice = totalPrice + theater.getPrice();
         }
         return totalPrice;
+    }
+
+    private String separar(String numero, int numeroCaracteres) {
+
+        StringBuilder stringBuilderAuxiliar = new StringBuilder("");
+
+        int i = 0;
+        for (Character caracter : numero.toCharArray()) {
+            if (i++ == numeroCaracteres) {
+                stringBuilderAuxiliar.append(" ");
+                i = 1;
+            }
+            stringBuilderAuxiliar.append(caracter.toString());
+        }
+        return stringBuilderAuxiliar.toString();
     }
 
     private int convertiraNumero(char opcion) {
@@ -225,9 +247,11 @@ public class MovieTicketSale extends Operation {
      * @param seat
      * @param session
      */
-    private List<String> printTicket(Theater theater, ArrayList<Seat> seat, Session session) {
+    private List<String> printTicket(Theater theater, ArrayList<Seat> seat, Session session,ArrayList<String> socios) throws FileNotFoundException {
 
         List<String> text = new ArrayList<>();
+        
+        
         text.add("   Entrada para " + theater.getFilm().getName());
         text.add("   ===================");
         text.add("   Sala " + theater.getNumber());
@@ -275,7 +299,7 @@ public class MovieTicketSale extends Operation {
             Socios socios = new Socios();
             state = new MultiplexState();
             state.loadMoviesAndSessions();
-//            state.loadpartners();
+            loadPartners();
             //loadPartners();
             isNewDayState = true;
 
@@ -314,4 +338,54 @@ public class MovieTicketSale extends Operation {
         return listPartner;
     }
 
+    private int checkMembershipNumber(Theater theater, ArrayList<Seat> seatsBuyed, ArrayList<String> socios) throws FileNotFoundException {
+
+        ArrayList<String> partners = loadPartners();
+        boolean exit = true;
+        while (exit) {
+            for (int j = 0; j < socios.size(); j++) {
+
+                String numeroSocio;
+                numeroSocio = socios.get(j);
+                long numberCredirCard = dispenser.getCardNumber();
+                String creditCardString = Long.toString(numberCredirCard);
+
+                int caracteres = 4;
+                String numeroSeparado = separar(creditCardString, caracteres);
+                System.out.println(numeroSeparado);
+
+                if (numeroSocio.equalsIgnoreCase(numeroSeparado)) {
+                    exit = false;
+                    totalPrice = (int) (totalPrice - (totalPrice * 0.3));
+                }
+            }
+        }
+
+        return totalPrice;
+    }
+
+    private boolean comprobarTarjeta(ArrayList<String> socios) throws FileNotFoundException {
+        ArrayList<String> partners = loadPartners();
+        boolean exit = true;
+        while (exit) {
+            for (int j = 0; j < socios.size(); j++) {
+
+                String numeroSocio;
+                numeroSocio = socios.get(j);
+                long numberCredirCard = dispenser.getCardNumber();
+                String creditCardString = Long.toString(numberCredirCard);
+
+                int caracteres = 4;
+                String numeroSeparado = separar(creditCardString, caracteres);
+                System.out.println(numeroSeparado);
+
+                if (numeroSocio.equalsIgnoreCase(numeroSeparado)) {
+                    exit = false;
+                    break;
+                }
+            }
+        }
+        return true;
+
+    }
 }

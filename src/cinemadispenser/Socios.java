@@ -19,4 +19,6 @@ public class Socios {
     public String toString() {
         return "Socios{" + '}';
     }
+
+    
 }
