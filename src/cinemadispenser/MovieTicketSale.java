@@ -1,10 +1,9 @@
 package cinemadispenser;
 
-import java.io.BufferedReader;
-import java.io.File;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type;
+import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.String;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import sienens.CinemaTicketDispenser;
@@ -21,11 +20,11 @@ import javax.naming.CommunicationException;
  */
 public class MovieTicketSale extends Operation {
 
+    
     public MovieTicketSale(CinemaTicketDispenser dispenser, Multiplex multiplex) throws IOException, CommunicationException {
         super(dispenser, multiplex);
         state = new MultiplexState();
         state.loadMoviesAndSessions();
-
     }
 
     private MultiplexState state;
@@ -52,17 +51,10 @@ public class MovieTicketSale extends Operation {
     public void doOperation() throws IOException, CommunicationException {
 
         newDay(multiplex);
-        ArrayList<String> socios = loadPartners();
-
-//hacer la comprobacion si es un nuevo dia para cargar las peliculas o no
-//         if(es nuevo dia){
-//         create new empty state
-//         } else {
-//         load serialized state }}
         Theater theater = selectTheatre();
         Session session = selectSession(theater);
         ArrayList<Seat> seat = selectSeats(theater, session);
-        //comprobar si se pula en cancelar cuando estamos en la pantalla de seleccionar las butacas
+        
         if (optionMenuSeats == "CANCEL") {
             MainMenu mainMenu = new MainMenu(dispenser, multiplex);
             mainMenu.doOperation();
@@ -72,10 +64,11 @@ public class MovieTicketSale extends Operation {
             String mensaje = (seat.size() + " entradas para " + theater.getFilm().getName() + "." + "\n" + "Precio total: " + totalPrice + "€");
             performPayment.doOperation(mensaje);
             //comprobar el numero de socio
-            if (comprobarTarjeta(socios) == true){
-                totalPrice = (int) (totalPrice - (totalPrice*0.3));
-            }
-            System.out.println(totalPrice);
+            
+           Socios socios = new Socios();
+           socios.doOperation();
+           
+          
             //checkMembershipNumber(theater, seat, socios);
 
             //mostrar el precio de descuento 
@@ -210,21 +203,7 @@ public class MovieTicketSale extends Operation {
         return totalPrice;
     }
 
-    private String separar(String numero, int numeroCaracteres) {
-
-        StringBuilder stringBuilderAuxiliar = new StringBuilder("");
-
-        int i = 0;
-        for (Character caracter : numero.toCharArray()) {
-            if (i++ == numeroCaracteres) {
-                stringBuilderAuxiliar.append(" ");
-                i = 1;
-            }
-            stringBuilderAuxiliar.append(caracter.toString());
-        }
-        return stringBuilderAuxiliar.toString();
-    }
-
+   
     private int convertiraNumero(char opcion) {
         switch (opcion) {
             case 'A':
@@ -247,7 +226,7 @@ public class MovieTicketSale extends Operation {
      * @param seat
      * @param session
      */
-    private List<String> printTicket(Theater theater, ArrayList<Seat> seat, Session session,ArrayList<String> socios) throws FileNotFoundException {
+    private List<String> printTicket(Theater theater, ArrayList<Seat> seat, Session session) throws FileNotFoundException {
 
         List<String> text = new ArrayList<>();
         
@@ -270,122 +249,33 @@ public class MovieTicketSale extends Operation {
     }
 
     public void serializeMultiplexstate() {
-
         //en este metodo tendremos que meter lo que queramos que se guqarde a disco 
         try {
-
             String ficheroSerializable = "./ficheros/serializable.ser";
             ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(ficheroSerializable));
             salida.writeObject(state);
             salida.close();
-
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
     public boolean newDay(Multiplex multiplex) throws IOException, CommunicationException {
-
         borrarOpciones();
-
         dispenser.setTitle("¿ES UN NUEVO DIA?");
         dispenser.setOption(0, "SÍ");
         dispenser.setOption(1, "NO");
-
         char option = dispenser.waitEvent(30);
 
         if (option == 'A') {
-
-            Socios socios = new Socios();
+           
             state = new MultiplexState();
             state.loadMoviesAndSessions();
-            loadPartners();
             //loadPartners();
             isNewDayState = true;
-
         } else if (option == 'B') {
             isNewDayState = false;
         }
         return isNewDayState;
-    }
-
-    private ArrayList<String> loadPartners() throws FileNotFoundException {
-        File archivo = new File("./Socios/Descuentos.txt");
-        FileReader fr = new FileReader(archivo);
-        BufferedReader br = new BufferedReader(fr);
-
-        ArrayList<String> listPartner = new ArrayList<String>();
-
-        try {
-            // Lectura del fichero
-            String linea;
-            while ((linea = br.readLine()) != null) {
-
-                String[] textoSeparado = linea.split("Socio:");
-                listPartner.add(textoSeparado[1]);
-            }
-        } catch (IOException e) {
-            e.printStackTrace(System.out);
-        } finally {
-            try {
-                if (fr != null) {
-                    fr.close();
-                }
-            } catch (IOException e2) {
-                e2.printStackTrace(System.out);
-            }
-        }
-        return listPartner;
-    }
-
-    private int checkMembershipNumber(Theater theater, ArrayList<Seat> seatsBuyed, ArrayList<String> socios) throws FileNotFoundException {
-
-        ArrayList<String> partners = loadPartners();
-        boolean exit = true;
-        while (exit) {
-            for (int j = 0; j < socios.size(); j++) {
-
-                String numeroSocio;
-                numeroSocio = socios.get(j);
-                long numberCredirCard = dispenser.getCardNumber();
-                String creditCardString = Long.toString(numberCredirCard);
-
-                int caracteres = 4;
-                String numeroSeparado = separar(creditCardString, caracteres);
-                System.out.println(numeroSeparado);
-
-                if (numeroSocio.equalsIgnoreCase(numeroSeparado)) {
-                    exit = false;
-                    totalPrice = (int) (totalPrice - (totalPrice * 0.3));
-                }
-            }
-        }
-
-        return totalPrice;
-    }
-
-    private boolean comprobarTarjeta(ArrayList<String> socios) throws FileNotFoundException {
-        ArrayList<String> partners = loadPartners();
-        boolean exit = true;
-        while (exit) {
-            for (int j = 0; j < socios.size(); j++) {
-
-                String numeroSocio;
-                numeroSocio = socios.get(j);
-                long numberCredirCard = dispenser.getCardNumber();
-                String creditCardString = Long.toString(numberCredirCard);
-
-                int caracteres = 4;
-                String numeroSeparado = separar(creditCardString, caracteres);
-                System.out.println(numeroSeparado);
-
-                if (numeroSocio.equalsIgnoreCase(numeroSeparado)) {
-                    exit = false;
-                    break;
-                }
-            }
-        }
-        return true;
-
     }
 }
