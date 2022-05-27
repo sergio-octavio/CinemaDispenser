@@ -14,12 +14,13 @@ import sienens.CinemaTicketDispenser;
  *
  */
 public class MainMenu extends Operation {
+    
 
     public MainMenu(CinemaTicketDispenser dispenser, Multiplex multiplex) {
         super(dispenser, multiplex);
     }
 
-    public void doOperation() throws IOException, CommunicationException {
+    public void doOperation() throws IOException, CommunicationException{
 
         MovieTicketSale movieTicketSale = new MovieTicketSale(dispenser, multiplex);
         IdiomSelection idiomSelection = new IdiomSelection(dispenser, multiplex);

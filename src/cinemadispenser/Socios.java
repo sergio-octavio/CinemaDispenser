@@ -13,64 +13,22 @@ import sienens.CinemaTicketDispenser;
  *
  * @author s.octavio.2018
  */
-public class Socios extends Operation {
+public class Socios {
 
-    private List<Socios> socios;
-
-    public List<Socios> getSocios() {
-        return socios;
+    public Socios() throws FileNotFoundException {
+        partners = loadPartners();
     }
 
-    @Override
-    public String toString() {
-        return "Socios{" + '}';
-    }
+    private ArrayList<String> partners;
 
-    public CinemaTicketDispenser getDispenser() {
-        return dispenser;
-    }
-
-    public void setSocios(List<Socios> socios) {
-        this.socios = socios;
-    }
-
-    public Multiplex getMultiplex() {
-        return multiplex;
-    }
-    
-    public void doOperation(){
-        ArrayList<String> comprobacion = comprobarTarjeta(socios);
-       
-    }
-
-    private boolean comprobarTarjeta(ArrayList<String> socios) throws FileNotFoundException {
-        ArrayList<String> partners = loadPartners();
-        boolean esSocio = false;
-        boolean exit = true;
-        while (exit) {
-
-            for (int j = 0; j < socios.size(); j++) {
-
-                String numeroSocio;
-                numeroSocio = socios.get(j);
-                long numberCredirCard = dispenser.getCardNumber();
-                String creditCardString = Long.toString(numberCredirCard);
-
-                int caracteres = 4;
-                String numeroSeparado = separar(creditCardString, caracteres);
-                System.out.println(numeroSeparado);
-
-                if (numeroSocio.equalsIgnoreCase(numeroSeparado)) {
-                    exit = false;
-                    esSocio = true;
-                    break;
-                } else {
-                    esSocio = false;
-                }
+    public boolean comprobarTarjeta(long numeroTarjeta) throws FileNotFoundException {
+        String numeroTarjetaEnCaracteres = convertir(numeroTarjeta);
+        for (String socio : partners) {
+            if (socio.equals(numeroTarjetaEnCaracteres)) {
+                return true;
             }
         }
-
-        return esSocio;
+        return false;
 
     }
 
@@ -112,6 +70,18 @@ public class Socios extends Operation {
             stringBuilderAuxiliar.append(caracter.toString());
         }
         return stringBuilderAuxiliar.toString();
+    }
+
+    private String convertir(long numeroTarjeta) {
+       
+       String aux = Long.toString(numeroTarjeta);
+     
+       String primero = (String) aux.subSequence(0, 4);
+       String segundo = (String) aux.subSequence(4, 8);
+       String tercero = (String) aux.subSequence(8, 12);
+       String cuarto = (String) aux.subSequence(12, 16);
+       
+               return primero + " " + segundo + " " +tercero + " " +cuarto;
     }
 
 }

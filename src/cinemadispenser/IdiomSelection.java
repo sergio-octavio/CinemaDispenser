@@ -15,7 +15,7 @@ import urjc.UrjcBankServer;
  *
  * @author octavio
  */
-class IdiomSelection extends Operation {
+public class IdiomSelection extends Operation {
 
     public IdiomSelection(CinemaTicketDispenser dispenser, Multiplex multiplex) {
         super(dispenser, multiplex);

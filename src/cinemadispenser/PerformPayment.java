@@ -38,6 +38,7 @@ public class PerformPayment extends MovieTicketSale {
         boolean exit = false;
         while (!exit) {
             char option = dispenser.waitEvent(30);
+          
 
             if (option == '1') { //si se inserta la tarjeta de credito
                 exit = true;
@@ -45,6 +46,12 @@ public class PerformPayment extends MovieTicketSale {
                 urjcBankServer.comunicationAvaiable();
                 urjcBankServer.doOperation(dispenser.getCardNumber(), totalPrice);
                 dispenser.expelCreditCard(30);
+                Socios socios = new Socios();
+                boolean esSocio = socios.comprobarTarjeta(dispenser.getCardNumber());
+                if (esSocio){
+                    double precioFinal = totalPrice - (totalPrice * 0.3);
+                } 
+                
                 break;
             } else if (option == 'E') { //boton de cancelar
                 exit = true;

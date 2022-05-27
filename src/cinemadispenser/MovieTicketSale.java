@@ -65,8 +65,11 @@ public class MovieTicketSale extends Operation {
             performPayment.doOperation(mensaje);
             //comprobar el numero de socio
             
-           Socios socios = new Socios();
-           socios.doOperation();
+            
+            
+            
+          
+        
            
           
             //checkMembershipNumber(theater, seat, socios);
@@ -278,4 +281,6 @@ public class MovieTicketSale extends Operation {
         }
         return isNewDayState;
     }
+
+    
 }
