@@ -28,6 +28,8 @@ public class Multiplex {
     public void start() throws FileNotFoundException, IOException, CommunicationException {
         CinemaTicketDispenser dispenser = new CinemaTicketDispenser();
         Multiplex multiplex = new Multiplex();
+        MovieTicketSale movieTicketSale = new MovieTicketSale(dispenser, multiplex);
+        movieTicketSale.newDay(multiplex);
 
         IdiomSelection idiomSelection = new IdiomSelection(dispenser, multiplex);
         idiomSelection.doOperation();

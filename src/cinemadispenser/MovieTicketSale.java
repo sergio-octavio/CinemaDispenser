@@ -49,7 +49,7 @@ public class MovieTicketSale extends Operation {
 
     public void doOperation() throws IOException, CommunicationException {
 
-        newDay(multiplex);
+        //newDay(multiplex);
         Theater theater = selectTheatre();
         Session session = selectSession(theater);
         ArrayList<Seat> seat = selectSeats(theater, session);
@@ -63,19 +63,21 @@ public class MovieTicketSale extends Operation {
             String mensaje = (seat.size() + " entradas para " + theater.getFilm().getName() + "." + "\n" + "Precio total: " + totalPrice + "€");
 
             double precioFinal;
+            boolean esSocio;
             if (performPayment.comprobarEsSocio(mensaje)) {
+                esSocio = true;
                 precioFinal = (totalPrice - (totalPrice * 0.3));
             } else {
                 precioFinal = totalPrice;
+                esSocio = false;
             }
             borrarOpciones();
-            mensaje = (seat.size() + " entradas para " + theater.getFilm().getName() + "." + "\n" + "Precio total: " + precioFinal + "€");
+            mensaje = (seat.size() + " entradas para " + theater.getFilm().getName() + "." + "\n" + "Precio total: " + precioFinal);
             dispenser.setDescription(mensaje);
             serializeMultiplexstate(); //guarda el proceso SERIALIZABLE
-            printTicket(theater, seat, session, precioFinal);
-//            printTicket(theater, seat, session, precioFinal); //metodo para generar el Ticket
+            printTicket(theater, seat, session, precioFinal, esSocio);
 
-            dispenser.print(printTicket(theater, seat, session));
+            dispenser.print(printTicket(theater, seat, session, precioFinal, esSocio));
             dispenser.setTitle("RECOJA LA TARJETA DE CRÉDITO");
             dispenser.expelCreditCard(30);
         }
@@ -225,7 +227,7 @@ public class MovieTicketSale extends Operation {
      * @param seat
      * @param session
      */
-    private List<String> printTicket(Theater theater, ArrayList<Seat> seat, Session session, double precioFinal) throws FileNotFoundException {
+    private List<String> printTicket(Theater theater, ArrayList<Seat> seat, Session session, double precioFinal, boolean esSocio) throws FileNotFoundException {
 
         List<String> text = new ArrayList<>();
 
@@ -242,8 +244,11 @@ public class MovieTicketSale extends Operation {
         }
         int totalPrice = computePrice(theater, seat);
         text.add("   Precio " + totalPrice + "€");
-        //hacer el if de si es socio para imprimir en el tocket el apartado de si es socio o no
-//si es socio, imprimir el ticket con el dinero final
+        Socios socios = new Socios();
+
+        if (esSocio) {
+            text.add("   Precio de SOCIO " + precioFinal + "€");
+        }
         return text;
     }
 
