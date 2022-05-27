@@ -20,7 +20,6 @@ import javax.naming.CommunicationException;
  */
 public class MovieTicketSale extends Operation {
 
-    
     public MovieTicketSale(CinemaTicketDispenser dispenser, Multiplex multiplex) throws IOException, CommunicationException {
         super(dispenser, multiplex);
         state = new MultiplexState();
@@ -54,29 +53,27 @@ public class MovieTicketSale extends Operation {
         Theater theater = selectTheatre();
         Session session = selectSession(theater);
         ArrayList<Seat> seat = selectSeats(theater, session);
-        
+
         if (optionMenuSeats == "CANCEL") {
             MainMenu mainMenu = new MainMenu(dispenser, multiplex);
             mainMenu.doOperation();
         } else if (seat.size() > 0) {  //si se ha seleccionado al menos una entrada...
-            int totalPrice = computePrice(theater, seat);
-            PerformPayment performPayment = new PerformPayment(dispenser, multiplex, totalPrice);
+            double totalPrice = computePrice(theater, seat);
+            PerformPayment performPayment = new PerformPayment(dispenser, multiplex, (int) totalPrice);
             String mensaje = (seat.size() + " entradas para " + theater.getFilm().getName() + "." + "\n" + "Precio total: " + totalPrice + "€");
-            performPayment.doOperation(mensaje);
-            //comprobar el numero de socio
-            
-            
-            
-            
-          
-        
-           
-          
-            //checkMembershipNumber(theater, seat, socios);
 
-            //mostrar el precio de descuento 
+            double precioFinal;
+            if (performPayment.comprobarEsSocio(mensaje)) {
+                precioFinal = (totalPrice - (totalPrice * 0.3));
+            } else {
+                precioFinal = totalPrice;
+            }
+            borrarOpciones();
+            mensaje = (seat.size() + " entradas para " + theater.getFilm().getName() + "." + "\n" + "Precio total: " + precioFinal + "€");
+            dispenser.setDescription(mensaje);
             serializeMultiplexstate(); //guarda el proceso SERIALIZABLE
-            printTicket(theater, seat, session); //metodo para generar el Ticket
+            printTicket(theater, seat, session, precioFinal);
+//            printTicket(theater, seat, session, precioFinal); //metodo para generar el Ticket
 
             dispenser.print(printTicket(theater, seat, session));
             dispenser.setTitle("RECOJA LA TARJETA DE CRÉDITO");
@@ -206,7 +203,6 @@ public class MovieTicketSale extends Operation {
         return totalPrice;
     }
 
-   
     private int convertiraNumero(char opcion) {
         switch (opcion) {
             case 'A':
@@ -229,11 +225,10 @@ public class MovieTicketSale extends Operation {
      * @param seat
      * @param session
      */
-    private List<String> printTicket(Theater theater, ArrayList<Seat> seat, Session session) throws FileNotFoundException {
+    private List<String> printTicket(Theater theater, ArrayList<Seat> seat, Session session, double precioFinal) throws FileNotFoundException {
 
         List<String> text = new ArrayList<>();
-        
-        
+
         text.add("   Entrada para " + theater.getFilm().getName());
         text.add("   ===================");
         text.add("   Sala " + theater.getNumber());
@@ -247,7 +242,8 @@ public class MovieTicketSale extends Operation {
         }
         int totalPrice = computePrice(theater, seat);
         text.add("   Precio " + totalPrice + "€");
-
+        //hacer el if de si es socio para imprimir en el tocket el apartado de si es socio o no
+//si es socio, imprimir el ticket con el dinero final
         return text;
     }
 
@@ -271,7 +267,7 @@ public class MovieTicketSale extends Operation {
         char option = dispenser.waitEvent(30);
 
         if (option == 'A') {
-           
+
             state = new MultiplexState();
             state.loadMoviesAndSessions();
             //loadPartners();
@@ -282,5 +278,4 @@ public class MovieTicketSale extends Operation {
         return isNewDayState;
     }
 
-    
 }

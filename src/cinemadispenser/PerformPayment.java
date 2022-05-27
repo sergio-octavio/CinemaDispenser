@@ -29,16 +29,16 @@ public class PerformPayment extends MovieTicketSale {
         return multiplex;
     }
 
-    public void doOperation(String mensaje) throws CommunicationException, IOException {
+    public boolean comprobarEsSocio(String mensaje) throws CommunicationException, IOException {
 
         borrarOpciones();
         dispenser.setTitle("INSERTE LA TARJETA DE CRÉDITO");
         dispenser.setDescription(mensaje);
         dispenser.setOption(4, "CANCELAR");
         boolean exit = false;
+        boolean esSocioFinal = false;
         while (!exit) {
             char option = dispenser.waitEvent(30);
-          
 
             if (option == '1') { //si se inserta la tarjeta de credito
                 exit = true;
@@ -48,16 +48,21 @@ public class PerformPayment extends MovieTicketSale {
                 dispenser.expelCreditCard(30);
                 Socios socios = new Socios();
                 boolean esSocio = socios.comprobarTarjeta(dispenser.getCardNumber());
-                if (esSocio){
-                    double precioFinal = totalPrice - (totalPrice * 0.3);
-                } 
-                
-                break;
+                double precioFinal = 0;
+                if (esSocio) {
+                    esSocioFinal = true;
+                    return esSocioFinal;
+                } else {
+                    esSocioFinal = false;
+                    return esSocioFinal;
+                }
+
             } else if (option == 'E') { //boton de cancelar
                 exit = true;
                 MovieTicketSale movieTicketSale = new MovieTicketSale(dispenser, multiplex);
                 movieTicketSale.doOperation();
             }
         }
+        return esSocioFinal;
     }
 }
