@@ -49,7 +49,6 @@ public class MovieTicketSale extends Operation {
 
     public void doOperation() throws IOException, CommunicationException {
 
-        //newDay(multiplex);
         Theater theater = selectTheatre();
         Session session = selectSession(theater);
         ArrayList<Seat> seat = selectSeats(theater, session);
@@ -60,7 +59,7 @@ public class MovieTicketSale extends Operation {
         } else if (seat.size() > 0) {  //si se ha seleccionado al menos una entrada...
             double totalPrice = computePrice(theater, seat);
             PerformPayment performPayment = new PerformPayment(dispenser, multiplex, (int) totalPrice);
-            String mensaje = (seat.size() + " entradas para " + theater.getFilm().getName() + "." + "\n" + "Precio total: " + totalPrice + "€");
+            String mensaje = (seat.size() + " entradas para " + theater.getFilm().getName() + "." + "\n" + "Precio total: " + totalPrice + "€"); //NOI18N
 
             double precioFinal;
             boolean esSocio;
@@ -72,13 +71,13 @@ public class MovieTicketSale extends Operation {
                 esSocio = false;
             }
             borrarOpciones();
-            mensaje = (seat.size() + " entradas para " + theater.getFilm().getName() + "." + "\n" + "Precio total: " + precioFinal);
+            mensaje = (seat.size() + " entradas para " + theater.getFilm().getName() + "." + "\n" + "Precio total: " + precioFinal + "€"); //NOI18N
             dispenser.setDescription(mensaje);
             serializeMultiplexstate(); //guarda el proceso SERIALIZABLE
             printTicket(theater, seat, session, precioFinal, esSocio);
 
             dispenser.print(printTicket(theater, seat, session, precioFinal, esSocio));
-            dispenser.setTitle("RECOJA LA TARJETA DE CRÉDITO");
+            dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("RECOJA LA TARJETA DE CRÉDITO"));
             dispenser.expelCreditCard(30);
         }
     }
@@ -86,7 +85,7 @@ public class MovieTicketSale extends Operation {
     private Theater selectTheatre() {
         borrarOpciones();
         //imprimimos las peliculas por pantalla
-        dispenser.setTitle("PELÍCULAS");
+        dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("PELÍCULAS"));
         int peliculasInt = 0;
 
         //imprime las peliculas disponibles en el dispensador
@@ -95,14 +94,17 @@ public class MovieTicketSale extends Operation {
         }
         char option = dispenser.waitEvent(30);
         int optionNum = convertiraNumero(option);
+        if (option == '1') {
+            selectTheatre();
+        }
         Theater optionTheatre = state.getTheatreList().get(optionNum);
         return optionTheatre;
     }
 
     private Session selectSession(Theater theater) {
         borrarOpciones();
-        dispenser.setTitle("Seleccione sesión");
-        dispenser.setImage("./Poster/" + theater.getFilm().getPoster());
+        dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("SELECCIONE SESIÓN"));
+        dispenser.setImage("./Poster/" + theater.getFilm().getPoster()); //NOI18N
         dispenser.setDescription(theater.getFilm().getDescription());
         int sessions = 0;
         for (Session session : theater.getSession()) {
@@ -130,7 +132,7 @@ public class MovieTicketSale extends Operation {
 
         borrarOpciones();
         boolean exit = false;
-        dispenser.setTitle("Seleccione butacas");
+        dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("SELECCIONE BUTACAS"));
         presentSeats(theater, session);
         ArrayList<Seat> buyedSeats = new ArrayList<>();
 
@@ -139,7 +141,7 @@ public class MovieTicketSale extends Operation {
             if (c == 'A') { //cancelar
                 exit = true;
                 buyedSeats = null;
-                optionMenuSeats = "CANCEL";
+                optionMenuSeats = "CANCEL"; //NOI18N
                 // COMPROBAR QUE AL SELECCIONAR EL BOTON DE ACEPTAR TIENE AL MENOS UNA BUTACA SELECCIONADA
             } else if (c == 'B') {
                 exit = true;
@@ -151,7 +153,7 @@ public class MovieTicketSale extends Operation {
                 Seat selectedSeat = new Seat(row, col);
                 if (!session.isOccupiesSeat(row, col) && (buyedSeats.size() != 4)) {
                     session.occupeSeat(row, col);
-                    dispenser.setTitle("Fila: " + row + " Asiento: " + col);
+                    dispenser.setTitle("Fila: " + row + " Asiento: " + col); //NOI18N
                     dispenser.markSeat(row, col, 3);
                     buyedSeats.add(selectedSeat);
                 } else if (buyedSeats.contains(selectedSeat)) {
@@ -160,7 +162,7 @@ public class MovieTicketSale extends Operation {
                     session.unocupiesSeat(row, col);
                     buyedSeats.remove(selectedSeat);
                 } else if (buyedSeats.size() == 4) {
-                    dispenser.setTitle("EL MAXIMO ES DE 4 BUTACAS");
+                    dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("EL MAXIMO ES DE 4 BUTACAS"));
                 }
             }
         }
@@ -187,8 +189,8 @@ public class MovieTicketSale extends Operation {
                 }
             }
         }
-        dispenser.setOption(0, "CANCELAR");
-        dispenser.setOption(1, "ACEPTAR");
+        dispenser.setOption(0, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CANCELAR"));
+        dispenser.setOption(1, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("ACEPTAR"));
     }
 
     /**
@@ -231,23 +233,23 @@ public class MovieTicketSale extends Operation {
 
         List<String> text = new ArrayList<>();
 
-        text.add("   Entrada para " + theater.getFilm().getName());
-        text.add("   ===================");
-        text.add("   Sala " + theater.getNumber());
-        text.add("   Hora " + session.getHour());
+        text.add("   Entrada para " + theater.getFilm().getName()); //NOI18N
+        text.add("   ==================="); //NOI18N
+        text.add("   Sala " + theater.getNumber()); //NOI18N
+        text.add("   Hora " + session.getHour()); //NOI18N
         int countSeat = 0;
         int countRow = 0;
         for (int i = 0; i < seat.size(); i++) {
             countSeat = seat.get(i).getCol();
             countRow = seat.get(i).getRow();
-            text.add("   Fila " + countRow + " - Butaca " + countSeat + " - Precio: " + theater.getPrice() + "€");
+            text.add("   Fila " + countRow + " - Butaca " + countSeat + " - Precio: " + theater.getPrice() + "€"); //NOI18N
         }
         int totalPrice = computePrice(theater, seat);
-        text.add("   Precio " + totalPrice + "€");
+        text.add("   Precio " + totalPrice + "€"); //NOI18N
         Socios socios = new Socios();
 
         if (esSocio) {
-            text.add("   Precio de SOCIO " + precioFinal + "€");
+            text.add("   Precio de SOCIO " + precioFinal + "€"); //NOI18N
         }
         return text;
     }
@@ -255,7 +257,7 @@ public class MovieTicketSale extends Operation {
     public void serializeMultiplexstate() {
         //en este metodo tendremos que meter lo que queramos que se guqarde a disco 
         try {
-            String ficheroSerializable = "./ficheros/serializable.ser";
+            String ficheroSerializable = "./ficheros/serializable.ser"; //NOI18N
             ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(ficheroSerializable));
             salida.writeObject(state);
             salida.close();
@@ -266,9 +268,9 @@ public class MovieTicketSale extends Operation {
 
     public boolean newDay(Multiplex multiplex) throws IOException, CommunicationException {
         borrarOpciones();
-        dispenser.setTitle("¿ES UN NUEVO DIA?");
-        dispenser.setOption(0, "SÍ");
-        dispenser.setOption(1, "NO");
+        dispenser.setTitle("¿ES UN NUEVO DIA?"); //NOI18N
+        dispenser.setOption(0, "SÍ"); //NOI18N
+        dispenser.setOption(1, "NO"); //NOI18N
         char option = dispenser.waitEvent(30);
 
         if (option == 'A') {
@@ -279,6 +281,8 @@ public class MovieTicketSale extends Operation {
             isNewDayState = true;
         } else if (option == 'B') {
             isNewDayState = false;
+        } else if (option == '1') {  //si se selecciona la tarjeta
+            newDay(multiplex);
         }
         return isNewDayState;
     }

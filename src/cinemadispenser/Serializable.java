@@ -4,8 +4,4 @@ package cinemadispenser;
  *
  * @author octavio
  */
-public interface Serializable {
-    
-    
-    
-}
+public interface Serializable {}

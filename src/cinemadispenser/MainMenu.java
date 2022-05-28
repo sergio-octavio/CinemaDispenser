@@ -61,6 +61,11 @@ public class MainMenu extends Operation {
                             idiomSelection.doOperation();
                         }
                     }
+                 //SI SE QUIERE INSERTAR LA TARJETA   
+                case '1':
+                    if (opcion == '1'){
+                        doOperation();
+                    }
                 
                    
             }

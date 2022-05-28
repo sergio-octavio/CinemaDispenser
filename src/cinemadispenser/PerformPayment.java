@@ -32,9 +32,9 @@ public class PerformPayment extends MovieTicketSale {
     public boolean comprobarEsSocio(String mensaje) throws CommunicationException, IOException {
 
         borrarOpciones();
-        dispenser.setTitle("INSERTE LA TARJETA DE CRÉDITO");
+        dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/spanish").getString("INSERTE LA TARJETA DE CRÉDITO"));
         dispenser.setDescription(mensaje);
-        dispenser.setOption(4, "CANCELAR");
+        dispenser.setOption(4, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CANCELAR"));
         boolean exit = false;
         boolean esSocioFinal = false;
         while (!exit) {

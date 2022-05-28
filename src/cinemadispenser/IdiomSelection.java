@@ -56,6 +56,9 @@ public class IdiomSelection extends Operation {
             case 'D':
                 this.multiplex.setIdiom("catalan");
                 break;
+            case '1':
+                doOperation();
+                break;
         }
     }
 }

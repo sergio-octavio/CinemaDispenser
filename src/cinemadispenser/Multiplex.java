@@ -28,6 +28,8 @@ public class Multiplex {
     public void start() throws FileNotFoundException, IOException, CommunicationException {
         CinemaTicketDispenser dispenser = new CinemaTicketDispenser();
         Multiplex multiplex = new Multiplex();
+        
+        //METODO PARA SABER SI ES UN NUEVO DIA O NO
         MovieTicketSale movieTicketSale = new MovieTicketSale(dispenser, multiplex);
         movieTicketSale.newDay(multiplex);
 
