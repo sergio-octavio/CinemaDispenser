@@ -82,7 +82,7 @@ public class MovieTicketSale extends Operation {
         }
     }
 
-    private Theater selectTheatre() {
+    private Theater selectTheatre() throws IOException, CommunicationException {
         borrarOpciones();
         //imprimimos las peliculas por pantalla
         dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("PELÍCULAS"));
@@ -92,16 +92,20 @@ public class MovieTicketSale extends Operation {
         for (Theater sala : state.getTheatreList()) {
             dispenser.setOption(peliculasInt++, sala.getFilm().getName());
         }
+        dispenser.setOption(5, "CANCELAR");
         char option = dispenser.waitEvent(30);
         int optionNum = convertiraNumero(option);
         if (option == '1') {
             selectTheatre();
+        } else if (option == 'F'){
+            MainMenu mainMenu = new MainMenu(dispenser, multiplex);
+            mainMenu.doOperation();
         }
         Theater optionTheatre = state.getTheatreList().get(optionNum);
         return optionTheatre;
     }
 
-    private Session selectSession(Theater theater) {
+    private Session selectSession(Theater theater) throws IOException, CommunicationException {
         borrarOpciones();
         dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("SELECCIONE SESIÓN"));
         dispenser.setImage("./Poster/" + theater.getFilm().getPoster()); //NOI18N
@@ -110,8 +114,16 @@ public class MovieTicketSale extends Operation {
         for (Session session : theater.getSession()) {
             dispenser.setOption(sessions++, session.getHour().toString());
         }
+        dispenser.setOption(5, "CANCELAR");
         char option = dispenser.waitEvent(30);
+        
         int optionNum = convertiraNumero(option);
+        if (option == '1') {
+            selectSession(theater);
+        } else if (option == 'F'){
+            MainMenu mainMenu = new MainMenu(dispenser, multiplex);
+            mainMenu.doOperation();
+        }
         Session optionSession = theater.getSession().get(optionNum);
         return optionSession;
     }

@@ -11,7 +11,7 @@ import urjc.UrjcBankServer;
  *
  * @author octavio
  */
-public class PerformPayment extends MovieTicketSale {
+public class PerformPayment extends MovieTicketSale{
 
     PerformPayment(CinemaTicketDispenser dispenser, Multiplex multiplex, int totalPrice) throws IOException, CommunicationException {
         super(dispenser, multiplex);

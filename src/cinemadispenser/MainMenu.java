@@ -50,7 +50,7 @@ public class MainMenu extends Operation {
                     if (opcion == 'B') {
                         if (mode == 0) {
                             Popcorn popcorn = new Popcorn(dispenser, multiplex);
-                            popcorn.doOperation();
+                            popcorn.doOperationPalomitas();
                         }
                     }
 
