@@ -6,9 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import sienens.CinemaTicketDispenser;
-
 /**
  *
  * @author s.octavio.2018
