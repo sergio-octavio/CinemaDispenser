@@ -2,8 +2,13 @@ package cinemadispenser;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.naming.CommunicationException;
 import sienens.CinemaTicketDispenser;
+import cinemadispenser.Palomitas;
+import java.awt.SystemColor;
+import static java.awt.SystemColor.text;
+import java.io.FileNotFoundException;
 
 /**
  *
@@ -22,6 +27,41 @@ class CompraPalomitas extends Operation {
         comprarPalomitas(cestaPalomitas);
         cantidadPalomitas(cestaPalomitas);
         Integer precioTotal = precioPalomitas(cestaPalomitas);
+
+        borrarOpciones();
+        dispenser.setTitle("¿SEGUIR COMPRANDO PALOMITAS?");
+        dispenser.setOption(0, "SÍ");
+        dispenser.setOption(1, "NO");
+        char option = dispenser.waitEvent(30);
+
+        if (option == 'A') {
+            comprarPalomitas(cestaPalomitas);
+        } else if (option == 'B') {
+
+            PerformPayment performPayment = new PerformPayment(dispenser, multiplex, precioTotal);
+            String mensaje = (mensajePalomitas(precioTotal, precioTotal, false));
+
+            double precioFinal;
+            boolean esSocio;
+            if (performPayment.comprobarEsSocio(mensaje)) {
+                esSocio = true;
+                precioFinal = (precioTotal - (precioTotal * 0.3));
+            } else {
+                precioFinal = precioTotal;
+                esSocio = false;
+            }
+
+            borrarOpciones();
+            mensaje = (mensajePalomitas(precioTotal, precioFinal, esSocio));
+            dispenser.setDescription(mensaje);
+
+            printTicket(precioTotal, precioFinal, esSocio);
+
+            dispenser.print(printTicket(precioTotal, precioFinal, esSocio));
+            dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("RECOJA LA TARJETA DE CRÉDITO"));
+            dispenser.expelCreditCard(30);
+
+        }
 
         PerformPayment performPayment = new PerformPayment(dispenser, multiplex, precioTotal);
 
@@ -97,5 +137,61 @@ class CompraPalomitas extends Operation {
         }
 
         return precioTotal;
+    }
+
+    private List<String> printTicket(Integer precioTotal, double precioFinal, boolean esSocio) throws FileNotFoundException {
+        List<String> text = new ArrayList<>();
+
+        text.add("   PALOMITAS: "); //NOI18N
+        text.add("   ==================="); //NOI18N
+
+        for (int i = 0; i < cestaPalomitas.size(); i++) {
+            if (cestaPalomitas.get(i).tipo.equals(Palomitas.Tipo.SMALL)) {
+                text.add("Pequeñas:" + " " + Palomitas.Tipo.SMALL + "€");
+            } else if (cestaPalomitas.get(i).tipo.equals(Palomitas.Tipo.MEDIUM)) {
+                text.add("Medianas:" + " " + Palomitas.Tipo.SMALL.coste + "€");
+            } else if (cestaPalomitas.get(i).tipo.equals(Palomitas.Tipo.BIG)) {
+                text.add("Grandes:" + " " + Palomitas.Tipo.BIG + "€");
+            }
+        }
+        text.add("Precio TOTAL: " + precioTotal);
+        Socios socios = new Socios();
+        if (esSocio) {
+            text.add("-----------------");
+            text.add("");
+            text.add("Precio de SOCIO " + precioFinal + "€"); //NOI18N
+        }
+        return text;
+    }
+
+    private String mensajePalomitas(Integer precioTotal, double precioFinal, boolean esSocio) throws FileNotFoundException {
+        StringBuilder textStrinbBuilder = new StringBuilder();
+        textStrinbBuilder.append("   PALOMITAS: " + "\n"); //NOI18N
+        textStrinbBuilder.append("   ===================" + "\n"); //NOI18N
+
+        for (int i = 0; i < cestaPalomitas.size(); i++) {
+            if (cestaPalomitas.get(i).tipo.equals(Palomitas.Tipo.SMALL)) {
+
+                textStrinbBuilder.append("- Pequeñas:" + " " + Palomitas.Tipo.SMALL + "€" + "\n");
+
+            } else if (cestaPalomitas.get(i).tipo.equals(Palomitas.Tipo.MEDIUM)) {
+
+                textStrinbBuilder.append("- Medianas:" + " " + Palomitas.Tipo.SMALL.coste + "€" + "\n");
+            } else if (cestaPalomitas.get(i).tipo.equals(Palomitas.Tipo.BIG)) {
+
+                textStrinbBuilder.append("- Grandes:" + " " + Palomitas.Tipo.BIG + "€" + "\n");
+            }
+        }
+
+        textStrinbBuilder.append("Precio TOTAL: " + precioTotal + "€" + "\n");
+
+        Socios socios = new Socios();
+        if (esSocio) {
+            textStrinbBuilder.append("   Precio de SOCIO " + precioFinal + "€" + "\n"); //NOI18N
+        }
+
+        String singleString = textStrinbBuilder.toString();
+        return singleString;
+
     }
 }

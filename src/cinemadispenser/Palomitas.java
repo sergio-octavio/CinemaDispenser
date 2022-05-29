@@ -1,9 +1,5 @@
 package cinemadispenser;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import javax.naming.CommunicationException;
-
 /**
  *
  * @author octavio
@@ -15,7 +11,11 @@ public class Palomitas {
     public Palomitas(Tipo tipo) {
         this.tipo = tipo;
     }
-
+/**
+ * METODO DONDE SE ESPECIFICA EL PRECIO DE CADA TIPO DE PALOMITAS
+ * SI POR ALGUN CASUAL ESTOS PRECIOS CAMBIAN, SOLO TENDRIAMOS QUE 
+ * MODIFICAR EL VALOR DE LOS ENUMERADOR.
+ */
     public enum Tipo {
         SMALL(3),
         MEDIUM(6),
