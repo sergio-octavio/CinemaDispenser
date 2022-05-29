@@ -1,6 +1,5 @@
 package cinemadispenser;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.naming.CommunicationException;
 import sienens.CinemaTicketDispenser;
@@ -32,6 +31,7 @@ public class MainMenu extends Operation {
             dispenser.setOption(0, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CARTELERA"));
             dispenser.setOption(1, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("PALOMITAS"));
             dispenser.setOption(2, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CAMBIAR IDIOMA"));
+            dispenser.setOption(4, "ADMINISTRADOR");
 
             char opcion = dispenser.waitEvent(30);
             switch (opcion) {
@@ -49,8 +49,6 @@ public class MainMenu extends Operation {
 
                             CompraPalomitas compraPalomitas = new CompraPalomitas(dispenser, multiplex);
                             compraPalomitas.doOperation();
-//                            Popcorn popcorn = new Popcorn(dispenser, multiplex);
-//                            popcorn.doOperationPalomitas();
                         }
                     }
 
@@ -61,7 +59,13 @@ public class MainMenu extends Operation {
                             idiomSelection.doOperation();
                         }
                     }
-                //SI SE QUIERE INSERTAR LA TARJETA   
+                case 'E':
+                    if (opcion == 'E'){
+                        if (mode == 0) {
+                            multiplex.start();
+                        }
+                    }
+                //SEGURIDAD POR SI SE INSERTA LA TARJE NO HACER NADA 
                 case '1':
                     if (opcion == '1') {
                         doOperation();

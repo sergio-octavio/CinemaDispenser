@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.naming.CommunicationException;
 import sienens.CinemaTicketDispenser;
-import cinemadispenser.Palomitas;
-import java.awt.SystemColor;
-import static java.awt.SystemColor.text;
 import java.io.FileNotFoundException;
 
 /**
@@ -35,19 +32,21 @@ class CompraPalomitas extends Operation {
         char option = dispenser.waitEvent(30);
 
         if (option == 'A') {
-            comprarPalomitas(cestaPalomitas);
+            doOperation();
         } else if (option == 'B') {
-
             PerformPayment performPayment = new PerformPayment(dispenser, multiplex, precioTotal);
             String mensaje = (mensajePalomitas(precioTotal, precioTotal, false));
-
             double precioFinal;
             boolean esSocio;
             if (performPayment.comprobarEsSocio(mensaje)) {
                 esSocio = true;
                 precioFinal = (precioTotal - (precioTotal * 0.3));
+                //redondeamos el resultado y restringomos a dos decimales
+                precioFinal = Math.round(precioFinal * 100.0) / 100.0;
             } else {
                 precioFinal = precioTotal;
+                //redondeamos el resultado y restringomos a dos decimales
+                precioFinal = Math.round(precioFinal * 100.0) / 100.0;
                 esSocio = false;
             }
 
@@ -60,14 +59,10 @@ class CompraPalomitas extends Operation {
             dispenser.print(printTicket(precioTotal, precioFinal, esSocio));
             dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("RECOJA LA TARJETA DE CRÉDITO"));
             dispenser.expelCreditCard(30);
-
         }
-
-        PerformPayment performPayment = new PerformPayment(dispenser, multiplex, precioTotal);
-
     }
 
-    private void comprarPalomitas(ArrayList<Palomitas> cesta) {
+    private void comprarPalomitas(ArrayList<Palomitas> cesta) throws IOException, CommunicationException {
 
         borrarOpciones();
         dispenser.setTitle("PALOMITAS:  ");
@@ -92,6 +87,9 @@ class CompraPalomitas extends Operation {
             case 'C':
                 cesta.add(new Palomitas(Palomitas.Tipo.BIG));
                 break;
+            case 'D':
+                MainMenu mainMenu = new MainMenu(dispenser, multiplex);
+                mainMenu.doOperation();
         }
     }
 
@@ -147,14 +145,14 @@ class CompraPalomitas extends Operation {
 
         for (int i = 0; i < cestaPalomitas.size(); i++) {
             if (cestaPalomitas.get(i).tipo.equals(Palomitas.Tipo.SMALL)) {
-                text.add("Pequeñas:" + " " + Palomitas.Tipo.SMALL + "€");
+                text.add("Pequeñas:" + " " + Palomitas.Tipo.SMALL.coste + "€");
             } else if (cestaPalomitas.get(i).tipo.equals(Palomitas.Tipo.MEDIUM)) {
                 text.add("Medianas:" + " " + Palomitas.Tipo.SMALL.coste + "€");
             } else if (cestaPalomitas.get(i).tipo.equals(Palomitas.Tipo.BIG)) {
-                text.add("Grandes:" + " " + Palomitas.Tipo.BIG + "€");
+                text.add("Grandes:" + " " + Palomitas.Tipo.BIG.coste + "€");
             }
         }
-        text.add("Precio TOTAL: " + precioTotal);
+        text.add("Precio TOTAL: " + precioTotal + "€");
         Socios socios = new Socios();
         if (esSocio) {
             text.add("-----------------");
@@ -171,15 +169,11 @@ class CompraPalomitas extends Operation {
 
         for (int i = 0; i < cestaPalomitas.size(); i++) {
             if (cestaPalomitas.get(i).tipo.equals(Palomitas.Tipo.SMALL)) {
-
-                textStrinbBuilder.append("- Pequeñas:" + " " + Palomitas.Tipo.SMALL + "€" + "\n");
-
+                textStrinbBuilder.append("- Pequeñas:" + " " + Palomitas.Tipo.SMALL.coste + "€" + "\n");
             } else if (cestaPalomitas.get(i).tipo.equals(Palomitas.Tipo.MEDIUM)) {
-
                 textStrinbBuilder.append("- Medianas:" + " " + Palomitas.Tipo.SMALL.coste + "€" + "\n");
             } else if (cestaPalomitas.get(i).tipo.equals(Palomitas.Tipo.BIG)) {
-
-                textStrinbBuilder.append("- Grandes:" + " " + Palomitas.Tipo.BIG + "€" + "\n");
+                textStrinbBuilder.append("- Grandes:" + " " + Palomitas.Tipo.BIG.coste + "€" + "\n");
             }
         }
 

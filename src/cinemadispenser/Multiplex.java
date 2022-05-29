@@ -39,4 +39,5 @@ public class Multiplex {
         MainMenu mainMenu = new MainMenu(dispenser, idiomSelection.getMultiplex());
         mainMenu.doOperation();  //presenta la pantalla de bienvenida
     }
+
 }

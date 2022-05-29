@@ -149,19 +149,19 @@ public class MovieTicketSale extends Operation {
         ArrayList<Seat> buyedSeats = new ArrayList<>();
 
         while (!exit) {
-            char c = dispenser.waitEvent(30);
-            if (c == 'A') { //cancelar
+            char option = dispenser.waitEvent(30);
+            if (option == 'A') { //cancelar
                 exit = true;
                 buyedSeats = null;
                 optionMenuSeats = "CANCEL"; //NOI18N
                 // COMPROBAR QUE AL SELECCIONAR EL BOTON DE ACEPTAR TIENE AL MENOS UNA BUTACA SELECCIONADA
-            } else if (c == 'B') {
+            } else if (option == 'B') {
                 exit = true;
 
-            } else if (c != 0) {
+            } else if ((option != 0) && (option != '1')) {
 
-                byte col = (byte) (c & 0xFF);
-                byte row = (byte) ((c & 0xFF00) >> 8);
+                byte col = (byte) (option & 0xFF);
+                byte row = (byte) ((option & 0xFF00) >> 8);
                 Seat selectedSeat = new Seat(row, col);
                 if (!session.isOccupiesSeat(row, col) && (buyedSeats.size() != 4)) {
                     session.occupeSeat(row, col);
@@ -176,6 +176,8 @@ public class MovieTicketSale extends Operation {
                 } else if (buyedSeats.size() == 4) {
                     dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("EL MAXIMO ES DE 4 BUTACAS"));
                 }
+            } else if (option == '1'){
+                exit = false;
             }
         }
         return buyedSeats;
