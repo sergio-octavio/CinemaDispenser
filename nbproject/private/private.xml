@@ -3,8 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/Socios.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/MovieTicketSale.java</file>
             <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/Popcorn.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/Multiplex.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/PerformPayment.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/CinemaDispenser.java</file>
         </group>
     </open-files>
 </project-private>

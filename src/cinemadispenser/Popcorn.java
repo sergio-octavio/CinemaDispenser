@@ -23,9 +23,11 @@ public class Popcorn extends Operation {
     private ArrayList<String> popcorn;
 
     public void doOperationPalomitas() throws IOException, CommunicationException {
-        sizePopcorn = tipoDePalomitas();
-        countPopcorn = countPopcorn(sizePopcorn);
         
+        ArrayList<String> totalPalomitas = new ArrayList<>();
+        sizePopcorn = tipoDePalomitas(totalPalomitas);
+        countPopcorn = countPopcorn(sizePopcorn);
+       
         borrarOpciones();
         dispenser.setTitle("¿QUIERES SEGUIR COMPRANDO PALOMITAS?");
         dispenser.setOption(0, "SÍ");
@@ -33,13 +35,13 @@ public class Popcorn extends Operation {
 
         char option = dispenser.waitEvent(30);
         if (option == 'A') {
-            tipoDePalomitas();
+            tipoDePalomitas(totalPalomitas);
         } else if ((option == 'B') && (!sizePopcorn.isEmpty())) {
             //CALCULAMOS LA CANTIDAD TOTAL DE PALOMITAS
-            double precioFinal = calculoPalomitas(sizePopcorn, countPopcorn);
+            double precioFinal = calculoPalomitas(sizePopcorn, countPopcorn, totalPalomitas);
             //IMPRIMIR TICKET   
             PerformPayment performPayment = new PerformPayment(dispenser, multiplex, (int) precioFinal);
-            
+//            String mensaje = (totalPalomitas.size() + "PALOMITAS " + theater.getFilm().getName() + "." + "\n" + "Precio total: " + totalPrice + "€"); //NOI18N
             double comprobacionPrecioSocio;
             boolean esSocio;
             if (performPayment.comprobarEsSocio(sizePopcorn)){
@@ -50,7 +52,7 @@ public class Popcorn extends Operation {
                 esSocio = false;
             }
             borrarOpciones();
-            printTicket(sizePopcorn, countPopcorn, pricePopcorn, comprobacionPrecioSocio, esSocio);
+//            printTicket(sizePopcorn, countPopcorn, pricePopcorn, comprobacionPrecioSocio, esSocio);
 
         } else { //por si falla 
             dispenser.setTitle("SE HA PRODUCIDO UN PROBLEMA");
@@ -64,7 +66,7 @@ public class Popcorn extends Operation {
 
     }
 
-    private String tipoDePalomitas() throws IOException, CommunicationException {
+    private ArrayList<String> tipoDePalomitas(ArrayList<String> totalPalomitas) throws IOException, CommunicationException {
         borrarOpciones();
         dispenser.setTitle("¿COMPRAR PALOMITAS?");
         dispenser.setOption(0, "PALOMITAS PEQUEÑAS");
@@ -82,6 +84,7 @@ public class Popcorn extends Operation {
         switch (option) {
             case 'A':
                 sizePopcorn = "SMALL";
+                
                 break;
             case 'B':
                 sizePopcorn = "MEDIUM";
@@ -97,7 +100,9 @@ public class Popcorn extends Operation {
                 doOperationPalomitas();
                 break;
         }
-        return sizePopcorn;
+        totalPalomitas.add(sizePopcorn);
+        
+        return totalPalomitas;
     }
 
     private Integer countPopcorn(String sizePopcorn1) throws IOException, CommunicationException {
@@ -111,7 +116,6 @@ public class Popcorn extends Operation {
         dispenser.setOption(4, "CANCELAR");
 
         char option = dispenser.waitEvent(30);
-        ArrayList<String> tipoPalomitas = new ArrayList<>();
         switch (option) {
             case 'A':
                 countPopcorn = 1;
@@ -127,7 +131,7 @@ public class Popcorn extends Operation {
                 countPopcorn = 4;
                 break;
             case 'E':
-                tipoDePalomitas();
+                tipoDePalomitas(popcorn);
             case '1':
                 countPopcorn(sizePopcorn1);
                 break;
@@ -135,10 +139,10 @@ public class Popcorn extends Operation {
         return countPopcorn;
     }
 
-    private double calculoPalomitas(String sizePopcorn, Integer countPopcorn) {
+    private double calculoPalomitas(String sizePopcorn, Integer countPopcor, ArrayList<String> totalPalomitas) {
 
-        double precioFinal = 0;
-        for (String palomitas : popcorn){
+        double precioFinal = 0; 
+        for (String listaPalomitas : totalPalomitas){
             if (sizePopcorn.equals("SMALL")) {
                 pricePopcorn = 3.0;
                 precioFinal = countPopcorn * pricePopcorn;
@@ -154,29 +158,29 @@ public class Popcorn extends Operation {
         return precioFinal;
     }
 
-    private void printTicket(String sizePopcorn1, Integer countPopcorn1, Double pricePopcorn1, double comprobacionPrecioSocio, boolean esSocio) {
-    
-        List<String> text = new ArrayList<>();
-
-        text.add("   PALOMITAS" ); //NOI18N
-        text.add("   ==================="); //NOI18N
-        text.add(countPopcorn"   Sala " + theater.getNumber()); //NOI18N
-        text.add("   Hora " + session.getHour()); //NOI18N
-        int countSeat = 0;
-        int countRow = 0;
-        for (int i = 0; i < seat.size(); i++) {
-            countSeat = seat.get(i).getCol();
-            countRow = seat.get(i).getRow();
-            text.add("   Fila " + countRow + " - Butaca " + countSeat + " - Precio: " + theater.getPrice() + "€"); //NOI18N
-        }
-        int totalPrice = computePrice(theater, seat);
-        text.add("   Precio " + totalPrice + "€"); //NOI18N
-        Socios socios = new Socios();
-
-        if (esSocio) {
-            text.add("   Precio de SOCIO " + precioFinal + "€"); //NOI18N
-        }
-        return text;
-    }}
+//    private void printTicket(String sizePopcorn1, Integer countPopcorn1, Double pricePopcorn1, double comprobacionPrecioSocio, boolean esSocio) {
+//    
+//        List<String> text = new ArrayList<>();
+//
+//        text.add("   PALOMITAS" ); //NOI18N
+//        text.add("   ==================="); //NOI18N
+//        text.add(countPopcorn"   Sala " + theater.getNumber()); //NOI18N
+//        text.add("   Hora " + session.getHour()); //NOI18N
+//        int countSeat = 0;
+//        int countRow = 0;
+//        for (int i = 0; i < seat.size(); i++) {
+//            countSeat = seat.get(i).getCol();
+//            countRow = seat.get(i).getRow();
+//            text.add("   Fila " + countRow + " - Butaca " + countSeat + " - Precio: " + theater.getPrice() + "€"); //NOI18N
+//        }
+//        int totalPrice = computePrice(theater, seat);
+//        text.add("   Precio " + totalPrice + "€"); //NOI18N
+//        Socios socios = new Socios();
+//
+//        if (esSocio) {
+//            text.add("   Precio de SOCIO " + precioFinal + "€"); //NOI18N
+//        }
+//        return text;
+//    }}
 
 }

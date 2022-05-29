@@ -14,13 +14,12 @@ import sienens.CinemaTicketDispenser;
  *
  */
 public class MainMenu extends Operation {
-    
 
     public MainMenu(CinemaTicketDispenser dispenser, Multiplex multiplex) {
         super(dispenser, multiplex);
     }
 
-    public void doOperation() throws IOException, CommunicationException{
+    public void doOperation() throws IOException, CommunicationException {
 
         MovieTicketSale movieTicketSale = new MovieTicketSale(dispenser, multiplex);
         IdiomSelection idiomSelection = new IdiomSelection(dispenser, multiplex);
@@ -34,7 +33,6 @@ public class MainMenu extends Operation {
             dispenser.setOption(0, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CARTELERA"));
             dispenser.setOption(1, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("PALOMITAS"));
             dispenser.setOption(2, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CAMBIAR IDIOMA"));
-           
 
             char opcion = dispenser.waitEvent(30);
             switch (opcion) {
@@ -49,8 +47,11 @@ public class MainMenu extends Operation {
                 case 'B':
                     if (opcion == 'B') {
                         if (mode == 0) {
-                            Popcorn popcorn = new Popcorn(dispenser, multiplex);
-                            popcorn.doOperationPalomitas();
+
+                            CompraPalomitas compraPalomitas = new CompraPalomitas(dispenser, multiplex);
+                            compraPalomitas.doOperation();
+//                            Popcorn popcorn = new Popcorn(dispenser, multiplex);
+//                            popcorn.doOperationPalomitas();
                         }
                     }
 
@@ -61,14 +62,13 @@ public class MainMenu extends Operation {
                             idiomSelection.doOperation();
                         }
                     }
-                 //SI SE QUIERE INSERTAR LA TARJETA   
+                //SI SE QUIERE INSERTAR LA TARJETA   
                 case '1':
-                    if (opcion == '1'){
+                    if (opcion == '1') {
                         doOperation();
                     }
-                
-                   
-            }
+
+            }   
         }
     }
 }

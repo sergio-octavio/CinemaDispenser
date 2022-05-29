@@ -34,7 +34,7 @@ public class PerformPayment extends MovieTicketSale{
         borrarOpciones();
         dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/spanish").getString("INSERTE LA TARJETA DE CRÉDITO"));
         dispenser.setDescription(mensaje);
-        dispenser.setOption(4, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CANCELAR"));
+        dispenser.setOption(4, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CANCELAR")); //NOI18N
         boolean exit = false;
         boolean esSocioFinal = false;
         while (!exit) {
