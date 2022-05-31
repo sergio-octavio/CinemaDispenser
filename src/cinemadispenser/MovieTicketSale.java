@@ -1,7 +1,5 @@
 package cinemadispenser;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type;
-import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.String;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
