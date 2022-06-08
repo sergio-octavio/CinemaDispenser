@@ -11,16 +11,13 @@ import sienens.CinemaTicketDispenser;
  *
  * @author octavio
  */
-public class ComprarBebidas extends Operation{
+public class ComprarBebidas extends Operation {
 
-   
     public ComprarBebidas(CinemaTicketDispenser dispenser, Multiplex multiplex) throws IOException, CommunicationException {
         super(dispenser, multiplex);
     }
 
     private ArrayList<Bebidas> cestaBebidas = new ArrayList<>();
-
-
 
     public void doOperation() throws IOException, CommunicationException {
 
@@ -155,6 +152,7 @@ public class ComprarBebidas extends Operation{
                 text.add("FantaNaranja:" + " " + Bebidas.Tipo.FantaNaranja.coste + "€");
             }
         }
+        text.add("   ===================" + "\n"); //NOI18N
         text.add("Precio TOTAL: " + precioTotal + "€");
         Socios socios = new Socios();
         if (esSocio) {
@@ -172,24 +170,22 @@ public class ComprarBebidas extends Operation{
 
         for (int i = 0; i < cestaBebidas.size(); i++) {
             if (cestaBebidas.get(i).tipo.equals(Bebidas.Tipo.Agua)) {
-                textStrinbBuilder.append("- Pequeñas:" + " " + Bebidas.Tipo.Agua.coste + "€" + "\n");
+                textStrinbBuilder.append("- Agua:" + " " + Bebidas.Tipo.Agua.coste + "€" + "\n");
             } else if (cestaBebidas.get(i).tipo.equals(Bebidas.Tipo.CocaCola)) {
-                textStrinbBuilder.append("- Medianas:" + " " + Bebidas.Tipo.CocaCola.coste + "€" + "\n");
+                textStrinbBuilder.append("- Coca~Cola:" + " " + Bebidas.Tipo.CocaCola.coste + "€" + "\n");
             } else if (cestaBebidas.get(i).tipo.equals(Bebidas.Tipo.FantaNaranja)) {
-                textStrinbBuilder.append("- Grandes:" + " " + Bebidas.Tipo.FantaNaranja.coste + "€" + "\n");
+                textStrinbBuilder.append("- FantaNaranja:" + " " + Bebidas.Tipo.FantaNaranja.coste + "€" + "\n");
             }
         }
-
+        textStrinbBuilder.append("   ===================" + "\n"); //NOI18N
         textStrinbBuilder.append("Precio TOTAL: " + precioTotal + "€" + "\n");
 
         Socios socios = new Socios();
         if (esSocio) {
             textStrinbBuilder.append("   Precio de SOCIO " + precioFinal + "€" + "\n"); //NOI18N
         }
-
         String singleString = textStrinbBuilder.toString();
         return singleString;
 
     }
 }
-

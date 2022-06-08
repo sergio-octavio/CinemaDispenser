@@ -4,11 +4,11 @@ package cinemadispenser;
  *
  * @author octavio
  */
-public class Palomitas {
+public class Snack {
 
     public Tipo tipo;
 
-    public Palomitas(Tipo tipo) {
+    public Snack(Tipo tipo) {
         this.tipo = tipo;
     }
 /**
@@ -19,7 +19,11 @@ public class Palomitas {
     public enum Tipo {
         SMALL(3),
         MEDIUM(6),
-        BIG(8);
+        BIG(8), 
+        COCACOLA(3), 
+        NESTEA(3),
+        FANTA(3),
+        AGUA(3);
 
         public int coste;
 

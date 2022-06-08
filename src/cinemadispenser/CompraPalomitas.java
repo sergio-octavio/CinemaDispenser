@@ -13,7 +13,7 @@ import java.io.FileNotFoundException;
  */
 class CompraPalomitas extends Operation {
 
-    private ArrayList<Palomitas> cestaPalomitas = new ArrayList<>();
+    private ArrayList<Snack> cestaPalomitas = new ArrayList<>();
 
     public CompraPalomitas(CinemaTicketDispenser dispenser, Multiplex multiplex) throws IOException, CommunicationException {
         super(dispenser, multiplex);
@@ -26,7 +26,7 @@ class CompraPalomitas extends Operation {
         Integer precioTotal = precioPalomitas(cestaPalomitas);
 
         borrarOpciones();
-        dispenser.setTitle("¿SEGUIR COMPRANDO PALOMITAS?");
+        dispenser.setTitle("¿SEGUIR COMPRANDO?");
         dispenser.setOption(0, "SÍ");
         dispenser.setOption(1, "NO");
         char option = dispenser.waitEvent(30);

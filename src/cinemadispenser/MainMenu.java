@@ -29,9 +29,8 @@ public class MainMenu extends Operation {
             borrarOpciones();
             dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("URJC CINEMA - BIENVENIDO"));
             dispenser.setOption(0, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CARTELERA"));
-            dispenser.setOption(1, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("PALOMITAS"));
-            dispenser.setOption(2, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("BEBIDAS"));
-            dispenser.setOption(3, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CAMBIAR IDIOMA"));
+            dispenser.setOption(1, "SNACKS");
+            dispenser.setOption(2, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CAMBIAR IDIOMA"));
             
 
             char opcion = dispenser.waitEvent(30);
@@ -43,15 +42,26 @@ public class MainMenu extends Operation {
                             movieTicketSale.doOperation();
                         }
                     }
-//                 opcion de PALOMITAS
-                case 'B':
+                    
+                    case 'B':
                     if (opcion == 'B') {
                         if (mode == 0) {
 
-                            CompraPalomitas compraPalomitas = new CompraPalomitas(dispenser, multiplex);
-                            compraPalomitas.doOperation();
+                            Snacks snacks = new Snacks(dispenser, multiplex);
+                            snacks.doOperation();
                         }
                     }
+                    
+                    
+//                 opcion de PALOMITAS
+//                case 'B':
+//                    if (opcion == 'B') {
+//                        if (mode == 0) {
+//
+//                            CompraPalomitas compraPalomitas = new CompraPalomitas(dispenser, multiplex);
+//                            compraPalomitas.doOperation();
+//                        }
+//                    }
                 case 'C':
                     if (opcion == 'C'){
                         if (mode == 0){
