@@ -26,9 +26,9 @@ class Snacks extends Operation {
         Integer precioTotal = precioSnacks(cesta);
 
         borrarOpciones();
-        dispenser.setTitle("¿SEGUIR COMPRANDO?");
-        dispenser.setOption(0, "SEGUIR COMPRANDO");
-        dispenser.setOption(1, "PAGAR");
+        dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("¿SEGUIR COMPRANDO?"));
+        dispenser.setOption(0, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("SEGUIR COMPRANDO"));
+        dispenser.setOption(1, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("PAGAR"));
         char option = dispenser.waitEvent(30);
 
         if (option == 'A') {
@@ -42,11 +42,11 @@ class Snacks extends Operation {
     private void comprarPalomitas(ArrayList<Snack> cesta) throws IOException, CommunicationException {
 
         borrarOpciones();
-        dispenser.setTitle("PALOMITAS:  ");
-        dispenser.setOption(0, "PALOMITAS PEQUEÑAS");
-        dispenser.setOption(1, "PALOMITAS MEDIANAS");
-        dispenser.setOption(2, "PALOMITAS GRANDES");
-        dispenser.setOption(3, "CANCELAR");
+        dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("PALOMITAS:  "));
+        dispenser.setOption(0, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("PALOMITAS PEQUEÑAS"));
+        dispenser.setOption(1, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("PALOMITAS MEDIANAS"));
+        dispenser.setOption(2, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("PALOMITAS GRANDES"));
+        dispenser.setOption(3, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CANCELAR"));
         dispenser.setDescription("PRECIOS: " + "\n"
                 + "----------" + "\n"
                 + "PALOMITAS PEQUEÑAS: " + Snack.Tipo.SMALL.coste + "€" + "\n"
@@ -78,12 +78,12 @@ class Snacks extends Operation {
         Snack ultimaAdd = cesta.get(last);
 
         borrarOpciones();
-        dispenser.setTitle("¿CUÁNTAS QUIERES?");
+        dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("¿CUÁNTAS QUIERES?"));
         dispenser.setOption(0, "1");
         dispenser.setOption(1, "2");
         dispenser.setOption(2, "3");
         dispenser.setOption(3, "4");
-        dispenser.setOption(4, "CANCELAR");
+        dispenser.setOption(4, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CANCELAR"));
 
         char option = dispenser.waitEvent(30);
         switch (option) {
@@ -186,10 +186,10 @@ class Snacks extends Operation {
     private void menuSnack() throws IOException, CommunicationException {
         borrarOpciones();
         dispenser.setTitle("SNACKS: ");
-        dispenser.setOption(0, "PALOMITAS");
-        dispenser.setOption(1, "BEBIDAS");
-        dispenser.setOption(3, "PAGAR");
-        dispenser.setOption(4, "CANCELAR");
+        dispenser.setOption(0, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("PALOMITAS"));
+        dispenser.setOption(1, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("BEBIDAS"));
+        dispenser.setOption(3, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("PAGAR"));
+        dispenser.setOption(4, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CANCELAR"));
         char option = dispenser.waitEvent(30);
 
         if (option == 'A') {
@@ -199,6 +199,8 @@ class Snacks extends Operation {
         }if (option == 'D'){
             if(!cesta.isEmpty()){
                 paymentSnacks(precioSnacks(cesta));
+            } else if (cesta.isEmpty()){
+                menuSnack();
             }
         } if (option == 'E'){
             MainMenu mainMenu = new MainMenu(dispenser, multiplex);
@@ -210,12 +212,12 @@ class Snacks extends Operation {
     private void comprarBebidas(ArrayList<Snack> cesta) throws IOException, CommunicationException {
        
         borrarOpciones();
-        dispenser.setTitle("BEBIDAS:  ");
-        dispenser.setOption(0, "COCACOLA");
-        dispenser.setOption(1, "FANTA NARANJA");
-        dispenser.setOption(2, "NESTEA");
-        dispenser.setOption(3, "AGUA");
-        dispenser.setOption(4, "CANCELAR");
+        dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("BEBIDAS:  "));
+        dispenser.setOption(0, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("COCACOLA"));
+        dispenser.setOption(1, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("FANTA NARANJA"));
+        dispenser.setOption(2, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("NESTEA"));
+        dispenser.setOption(3, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("AGUA"));
+        dispenser.setOption(4, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CANCELAR"));
         dispenser.setDescription("PRECIOS: " + "\n"
                 + "----------" + "\n"
                 + "TODAS LAS BEBIDAS CUESTAN 3€ " );

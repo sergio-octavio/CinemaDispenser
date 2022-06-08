@@ -72,8 +72,8 @@ public class PerformPayment extends MovieTicketSale {
                 
             } else if (option == 'E') { //boton de cancelar
                 exit = true;
-                MovieTicketSale movieTicketSale = new MovieTicketSale(dispenser, multiplex);
-                movieTicketSale.doOperation();
+                MainMenu mainMenu = new MainMenu(dispenser, multiplex);
+                mainMenu.doOperation();
             }
         }
         return esSocioFinal;

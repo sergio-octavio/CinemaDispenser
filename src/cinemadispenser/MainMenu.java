@@ -27,11 +27,10 @@ public class MainMenu extends Operation {
         while (true) {
 
             borrarOpciones();
-            dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("URJC CINEMA - BIENVENIDO"));
-            dispenser.setOption(0, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CARTELERA"));
-            dispenser.setOption(1, "SNACKS");
-            dispenser.setOption(2, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CAMBIAR IDIOMA"));
-            
+            dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("URJC CINEMA - BIENVENIDO")); //NOI18N
+            dispenser.setOption(0, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CARTELERA")); //NOI18N
+            dispenser.setOption(1, java.util.ResourceBundle.getBundle("cinemadispenser/spanish").getString("SNACKS"));
+            dispenser.setOption(2, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CAMBIAR IDIOMA")); //NOI18N
 
             char opcion = dispenser.waitEvent(30);
             switch (opcion) {
@@ -42,42 +41,25 @@ public class MainMenu extends Operation {
                             movieTicketSale.doOperation();
                         }
                     }
-                    
-                    case 'B':
+
+                case 'B':
                     if (opcion == 'B') {
                         if (mode == 0) {
-
                             Snacks snacks = new Snacks(dispenser, multiplex);
                             snacks.doOperation();
                         }
                     }
-                    
-                    
-//                 opcion de PALOMITAS
-//                case 'B':
-//                    if (opcion == 'B') {
-//                        if (mode == 0) {
-//
-//                            CompraPalomitas compraPalomitas = new CompraPalomitas(dispenser, multiplex);
-//                            compraPalomitas.doOperation();
-//                        }
-//                    }
-                case 'C':
-                    if (opcion == 'C'){
-                        if (mode == 0){
-                            ComprarBebidas comprarBebidas = new ComprarBebidas(dispenser, multiplex);
-                            comprarBebidas.doOperation();
-                        }
-                    }
+
+                
                 // opcion de CAMBIO DE IDIOMA
-                case 'D':
-                    if (opcion == 'D') {
+                case 'C':
+                    if (opcion == 'C') {
                         if (mode == 0) {
                             idiomSelection.doOperation();
                         }
                     }
                 case 'E':
-                    if (opcion == 'E'){
+                    if (opcion == 'E') {
                         if (mode == 0) {
                             multiplex.start();
                         }
@@ -88,7 +70,7 @@ public class MainMenu extends Operation {
                         doOperation();
                     }
 
-            }   
+            }
         }
     }
 }
