@@ -21,14 +21,14 @@ class Snacks extends Operation {
 
     public void doOperation() throws IOException, CommunicationException {
         menuSnack();
-//        comprarPalomitas(cesta);
-//        cantidadPalomitas(cesta);
         Integer precioTotal = precioSnacks(cesta);
 
         borrarOpciones();
         dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("¿SEGUIR COMPRANDO?"));
         dispenser.setOption(0, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("SEGUIR COMPRANDO"));
         dispenser.setOption(1, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("PAGAR"));
+        String mensaje = (mensaje(precioTotal, precioTotal, false));
+        dispenser.setDescription(mensaje);
         char option = dispenser.waitEvent(30);
 
         if (option == 'A') {

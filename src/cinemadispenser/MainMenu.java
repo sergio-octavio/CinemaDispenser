@@ -29,7 +29,7 @@ public class MainMenu extends Operation {
             borrarOpciones();
             dispenser.setTitle(java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("URJC CINEMA - BIENVENIDO")); //NOI18N
             dispenser.setOption(0, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CARTELERA")); //NOI18N
-            dispenser.setOption(1, java.util.ResourceBundle.getBundle("cinemadispenser/spanish").getString("SNACKS"));
+            dispenser.setOption(1, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("SNACKS"));
             dispenser.setOption(2, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CAMBIAR IDIOMA")); //NOI18N
 
             char opcion = dispenser.waitEvent(30);
