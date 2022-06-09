@@ -28,7 +28,15 @@ public class PerformPayment extends MovieTicketSale {
     public Multiplex getMultiplex() {
         return multiplex;
     }
-    
+    /**
+     * 
+     * @param mensaje
+     * @return
+     * @throws CommunicationException
+     * @throws IOException 
+     * Método encargado de comprobar si el usuario es SOCIO. 
+     * Se verifica el listado de socios y se comprueba con la tarjeta introducida en el cajero.
+     */
     public boolean comprobarEsSocio(String mensaje) throws CommunicationException, IOException {
         
         borrarOpciones();
@@ -52,6 +60,9 @@ public class PerformPayment extends MovieTicketSale {
                     Socios socios = new Socios();
                     boolean esSocio = socios.comprobarTarjeta(dispenser.getCardNumber());
                     double precioFinal = 0;
+                    
+                    //  COMPROBAR SI ES SOCIO
+                    
                     if (esSocio) {
                         esSocioFinal = true;
                         return esSocioFinal;

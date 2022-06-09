@@ -22,14 +22,14 @@ public class Session implements Serializable {
     public Set<Seat> getOccupiedSeatSet() {
         return occupiedSeatSet;
     }
-
+//metodo para ocupar el asiento
     public boolean isOccupiesSeat(int row, int col) {
         Seat seat = new Seat(row, col);
         
         return occupiedSeatSet.contains(seat);
     }
    
-
+//metodo para desocupar el asiento (remove)
     public void unocupiesSeat(int row, int col) {
         Seat seat = new Seat(row, col);
         occupiedSeatSet.remove(seat);

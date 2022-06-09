@@ -4,6 +4,7 @@ package cinemadispenser;
  *
  * @author octavio
  */
+
 class Seat implements Serializable {
 
     private int row;

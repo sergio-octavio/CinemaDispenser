@@ -4,6 +4,8 @@ package cinemadispenser;
  *
  * @author octavio
  */
+
+//Clase encargada de seperar las horas de los minutos
 public class Pair<T, M> {
 
     private T hour;

@@ -39,6 +39,7 @@ public class IdiomSelection extends Operation {
         dispenser.setOption(4, null);
         dispenser.setOption(5, null);
 
+        
         char opcion = dispenser.waitEvent(30);
         switch (opcion) {
             case 'A':

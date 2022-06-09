@@ -10,17 +10,27 @@ import java.io.FileNotFoundException;
 /**
  *
  * @author octavio
+ * 
+ * Clase encargada de las compras de los Snacks
  */
 class Snacks extends Operation {
-
+    //ArrayList donde iremos añadiendo todos los productos que vayamos comprando para luego realizar el pago total
     private ArrayList<Snack> cesta = new ArrayList<>();
 
     public Snacks(CinemaTicketDispenser dispenser, Multiplex multiplex) throws IOException, CommunicationException {
         super(dispenser, multiplex);
     }
 
+    /**
+     * 
+     * @throws IOException
+     * @throws CommunicationException 
+     * Metodo principal de esta clase. 
+     * Encargada de gestionar el proceso de la compra de snacks.
+     * 
+     */
     public void doOperation() throws IOException, CommunicationException {
-        menuSnack();
+        menuSnack(); //muestra el menu de selección del tipo de snack. (palomitas o bebidas). 
         Integer precioTotal = precioSnacks(cesta);
 
         borrarOpciones();
@@ -28,7 +38,9 @@ class Snacks extends Operation {
         dispenser.setOption(0, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("SEGUIR COMPRANDO"));
         dispenser.setOption(1, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("PAGAR"));
         String mensaje = (mensaje(precioTotal, precioTotal, false));
-        dispenser.setDescription(mensaje);
+        // en este campo se irán mostrando todos los productos que iremos comprando, de modo
+        // que, sabremos en todo momento lo que llevaremos en la cesta.
+        dispenser.setDescription(mensaje); 
         char option = dispenser.waitEvent(30);
 
         if (option == 'A') {
@@ -39,6 +51,14 @@ class Snacks extends Operation {
         }
     }
 
+    /**
+     * 
+     * @param cesta
+     * @throws IOException
+     * @throws CommunicationException 
+     * Método destinado para la compra exclusivamente de las palomitas.
+     * Seleccionamos el tipo de palomitas (pequeñas, medianas o grandes).
+     */
     private void comprarPalomitas(ArrayList<Snack> cesta) throws IOException, CommunicationException {
 
         borrarOpciones();
@@ -71,10 +91,16 @@ class Snacks extends Operation {
         cantidad(cesta);
     }
 
+    /**
+     * 
+     * @param cesta 
+     * Método destinado solo para seleccionar la cantidad que se quiera de cada tipo de snack. Este método se usa tanto para 
+     * las palomitas como para las bebidas. 
+     */
     private void cantidad(ArrayList<Snack> cesta) {
 
         int last = cesta.size() - 1;
-
+        //ultimaAdd: ultimo producto que hay en la cesta
         Snack ultimaAdd = cesta.get(last);
 
         borrarOpciones();
@@ -84,7 +110,8 @@ class Snacks extends Operation {
         dispenser.setOption(2, "3");
         dispenser.setOption(3, "4");
         dispenser.setOption(4, java.util.ResourceBundle.getBundle("cinemadispenser/" + this.multiplex.getIdiom()).getString("CANCELAR"));
-
+        
+        //switch para cuando se elija la cantidad añada la cantidad correspondiente
         char option = dispenser.waitEvent(30);
         switch (option) {
             case 'A':
@@ -104,6 +131,12 @@ class Snacks extends Operation {
         }
     }
 
+/**
+ * 
+ * @param cesta
+ * @return precioTotal
+ *Calcula el precio del snack correspondiente
+ */   
     private int precioSnacks(ArrayList<Snack> cesta) {
 
         int precioTotal = 0;
@@ -115,6 +148,15 @@ class Snacks extends Operation {
         return precioTotal;
     }
 
+/**
+ * 
+ * @param precioTotal
+ * @param precioFinal
+ * @param esSocio
+ * @return
+ * @throws FileNotFoundException 
+ * Método para mostrar lo que se ha comprado. 
+ */
     private List<String> printTicket(Integer precioTotal, double precioFinal, boolean esSocio) throws FileNotFoundException {
         List<String> text = new ArrayList<>();
 
@@ -147,7 +189,16 @@ class Snacks extends Operation {
         }
         return text;
     }
-
+/**
+ * 
+ * @param precioTotal
+ * @param precioFinal
+ * @param esSocio
+ * @return
+ * @throws FileNotFoundException 
+ * Muestra lo que se va comprando en todo momento. Nos facilita al usuario ver en todo momento lo que se lleva en la cesta. 
+ * 
+ */
     private String mensaje(Integer precioTotal, double precioFinal, boolean esSocio) throws FileNotFoundException {
         StringBuilder textStrinbBuilder = new StringBuilder();
         textStrinbBuilder.append("   SNACKS: " + "\n"); //NOI18N
@@ -182,7 +233,12 @@ class Snacks extends Operation {
         return singleString;
 
     }
-
+/**
+ * 
+ * @throws IOException
+ * @throws CommunicationException 
+ * Método para mostrar los snacks 
+ */
     private void menuSnack() throws IOException, CommunicationException {
         borrarOpciones();
         dispenser.setTitle("SNACKS: ");
@@ -208,7 +264,13 @@ class Snacks extends Operation {
         }
         
     }
-
+/**
+ * 
+ * @param cesta
+ * @throws IOException
+ * @throws CommunicationException 
+ * Muestra los tipos de bebidas
+ */
     private void comprarBebidas(ArrayList<Snack> cesta) throws IOException, CommunicationException {
        
         borrarOpciones();
@@ -243,7 +305,13 @@ class Snacks extends Operation {
         }
         cantidad(cesta);
     }
-
+/**
+ * 
+ * @param precioTotal
+ * @throws IOException
+ * @throws CommunicationException 
+ * Cálculo de los precios, comprobando antes si el usuario es Socio.
+ */
     private void paymentSnacks(Integer precioTotal) throws IOException, CommunicationException {
         PerformPayment performPayment = new PerformPayment(dispenser, multiplex, precioTotal);
             String mensaje = (mensaje(precioTotal, precioTotal, false));

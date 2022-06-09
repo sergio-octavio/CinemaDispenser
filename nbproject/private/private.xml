@@ -2,6 +2,23 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/Seat.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/Snacks.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/Theater.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/Film.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/MainMenu.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/Multiplex.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/PerformPayment.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/Operation.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/IdiomSelection.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/MovieTicketSale.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/Session.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/Snack.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/Socios.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/Pair.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/MultiplexState.java</file>
+            <file>file:/C:/Users/octavio/Documents/SERGIO/UNIVERSIDAD/POO/PRACTICA/CinemaDispenser/src/cinemadispenser/CinemaDispenser.java</file>
+        </group>
     </open-files>
 </project-private>

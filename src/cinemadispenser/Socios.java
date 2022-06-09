@@ -28,16 +28,21 @@ public class Socios {
         return false;
 
     }
-
+/**
+ * 
+ * @return
+ * @throws FileNotFoundException 
+ * Carga los socios del fichero propocionar en la ruta "./Socios/Descuentos.txt" y los guarda en una lista.
+ */
     private ArrayList<String> loadPartners() throws FileNotFoundException {
         File archivo = new File("./Socios/Descuentos.txt");
-        FileReader fr = new FileReader(archivo);
-        BufferedReader br = new BufferedReader(fr);
+        FileReader fileReader = new FileReader(archivo);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
         ArrayList<String> listPartner = new ArrayList<String>();
         try {
             // Lectura del fichero
             String linea;
-            while ((linea = br.readLine()) != null) {
+            while ((linea = bufferedReader.readLine()) != null) {
 
                 String[] textoSeparado = linea.split("Socio:");
                 listPartner.add(textoSeparado[1]);
@@ -46,8 +51,8 @@ public class Socios {
             e.printStackTrace(System.out);
         } finally {
             try {
-                if (fr != null) {
-                    fr.close();
+                if (fileReader != null) {
+                    fileReader.close();
                 }
             } catch (IOException e2) {
                 e2.printStackTrace(System.out);
@@ -56,6 +61,12 @@ public class Socios {
         return listPartner;
     }
 
+/**
+ * 
+ * @param numero
+ * @param numeroCaracteres
+ * @return número de socio separado por pares de 4
+ */
     private String separar(String numero, int numeroCaracteres) {
         StringBuilder stringBuilderAuxiliar = new StringBuilder("");
         int i = 0;
@@ -69,6 +80,11 @@ public class Socios {
         return stringBuilderAuxiliar.toString();
     }
 
+/**
+ * 
+ * @param numeroTarjeta
+ * @return recogemos el número de la tarjeta
+ */
     private String convertir(long numeroTarjeta) {
        
        String aux = Long.toString(numeroTarjeta);

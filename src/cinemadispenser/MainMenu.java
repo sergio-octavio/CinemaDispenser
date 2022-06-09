@@ -18,6 +18,12 @@ public class MainMenu extends Operation {
         super(dispenser, multiplex);
     }
 
+    /**
+     * 
+     * @throws IOException
+     * @throws CommunicationException 
+     * Muestra el menú principal del programa. Cartelera, snacks, cambiar idioma
+     */
     public void doOperation() throws IOException, CommunicationException {
 
         MovieTicketSale movieTicketSale = new MovieTicketSale(dispenser, multiplex);
@@ -41,7 +47,7 @@ public class MainMenu extends Operation {
                             movieTicketSale.doOperation();
                         }
                     }
-
+                    //OPCION SNAKS
                 case 'B':
                     if (opcion == 'B') {
                         if (mode == 0) {
@@ -64,10 +70,10 @@ public class MainMenu extends Operation {
                             multiplex.start();
                         }
                     }
-                //SEGURIDAD POR SI SE INSERTA LA TARJE NO HACER NADA 
+                //SEGURIDAD POR SI SE INSERTA LA TARJETA: NO HACER NADA 
                 case '1':
                     if (opcion == '1') {
-                        doOperation();
+                        doOperation(); //si se mete la tarjeta vuelve al mismo menu
                     }
 
             }
