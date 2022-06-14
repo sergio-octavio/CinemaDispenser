@@ -12,6 +12,9 @@ import java.io.FileNotFoundException;
  * @author octavio
  * 
  * Clase encargada de las compras de los Snacks
+ * 
+ * //esta clase es la encargada de gestionar todo lo relacionado con la comida o snack del cine. 
+//Para la compra de palomitas o bebidas. 
  */
 class Snacks extends Operation {
     //ArrayList donde iremos añadiendo todos los productos que vayamos comprando para luego realizar el pago total

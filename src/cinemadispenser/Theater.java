@@ -58,7 +58,12 @@ public class Theater implements Serializable {
     public int getMaxCols() {
         return maxCols;
     }
-
+/**
+ * Carga de los asientos para los respectivos teatros
+ * @param fileTheatre
+ * @throws FileNotFoundException
+ * @throws IOException 
+ */
     public void loadSeats(String fileTheatre) throws FileNotFoundException, IOException {
 
         FileReader theaterFile = new FileReader("./Theaters/" + fileTheatre);

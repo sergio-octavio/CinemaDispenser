@@ -1,11 +1,6 @@
 package cinemadispenser;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.naming.CommunicationException;
 import sienens.CinemaTicketDispenser;
-import urjc.UrjcBankServer;
 
 /**
  * Gestiona la operación de selección inicial del idioma. Cuando esta clase
@@ -29,6 +24,7 @@ public class IdiomSelection extends Operation {
         return multiplex;
     }
 
+    //MENU PARA LOS DIFERENTES IDIOMAS DISPONIBLES
     public void doOperation() {
         borrarOpciones();
         dispenser.setTitle("Por favor, seleccione el idioma");

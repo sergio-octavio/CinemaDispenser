@@ -4,6 +4,11 @@ package cinemadispenser;
  *
  * @author octavio
  */
+
+
+//POSIBLE CLASE PARA EL EXAMEN
+
+
 public class Snack {
 
     public Tipo tipo;

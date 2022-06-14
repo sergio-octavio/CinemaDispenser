@@ -45,6 +45,13 @@ public class MovieTicketSale extends Operation {
     private String optionMenuSeats;
     private Boolean isNewDayState;
 
+/**
+ * 
+ * @throws IOException
+ * @throws CommunicationException 
+ * Método encargado del pago de las entradas de cine. 
+ * Comprobar si el usuario es socio o no. 
+ */
     public void doOperation() throws IOException, CommunicationException {
 
         Theater theater = selectTheatre();
@@ -80,6 +87,13 @@ public class MovieTicketSale extends Operation {
         }
     }
 
+/**
+ * 
+ * @return
+ * @throws IOException
+ * @throws CommunicationException 
+ * Método para la selección del
+ */
     private Theater selectTheatre() throws IOException, CommunicationException {
         borrarOpciones();
         //imprimimos las peliculas por pantalla
@@ -127,6 +141,9 @@ public class MovieTicketSale extends Operation {
     }
 
     /**
+     * 
+     * Método para seleccionar los asientos. 
+     * 
      * Mark a seat in the screen. the seat screen in composed by a matrix of 8
      * rows and 15 cols. param para markSeat (no seat), 1 (OCCUPIED), 2 (FREE),
      * 3 (SELECTED).
@@ -181,6 +198,13 @@ public class MovieTicketSale extends Operation {
         return buyedSeats;
     }
 
+/**
+ * 
+ * @param theater
+ * @param session
+ * @throws IOException 
+ * Muestra los asientos que tiene la sala correspondiente seleccionada anteriormente.  
+ */
     private void presentSeats(Theater theater, Session session) throws IOException {
         int maxRows = theater.getMaxRows();
         int maxCols = theater.getMaxCols();
@@ -210,6 +234,7 @@ public class MovieTicketSale extends Operation {
      * @param theater
      * @param seatsBuyed
      * @return totalPrice
+     * Cálculo del precio total. 
      */
     private int computePrice(Theater theater, ArrayList<Seat> seatsBuyed) throws FileNotFoundException {
         int totalPrice = 0;
@@ -219,6 +244,12 @@ public class MovieTicketSale extends Operation {
         return totalPrice;
     }
 
+    
+/**
+ * 
+ * @param opcion
+ * @return 
+ */
     private int convertiraNumero(char opcion) {
         switch (opcion) {
             case 'A':
@@ -266,6 +297,9 @@ public class MovieTicketSale extends Operation {
         return text;
     }
 
+/**
+ * serializacion para guardar en todo momento todo el proceso. 
+ */
     public void serializeMultiplexstate() {
         //en este metodo tendremos que meter lo que queramos que se guqarde a disco 
         try {
@@ -277,7 +311,14 @@ public class MovieTicketSale extends Operation {
             System.out.println(e);
         }
     }
-
+/**
+ * 
+ * @param multiplex
+ * @return
+ * @throws IOException
+ * @throws CommunicationException 
+ * Método para saber si el admin quiere cargar los teatros desde el punto que se dejo o reiniciar el programa de cero.
+ */
     public boolean newDay(Multiplex multiplex) throws IOException, CommunicationException {
         borrarOpciones();
         dispenser.setTitle("¿ES UN NUEVO DIA?"); //NOI18N

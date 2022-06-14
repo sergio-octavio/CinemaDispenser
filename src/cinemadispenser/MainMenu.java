@@ -22,7 +22,7 @@ public class MainMenu extends Operation {
      * 
      * @throws IOException
      * @throws CommunicationException 
-     * Muestra el menú principal del programa. Cartelera, snacks, cambiar idioma
+     * Muestra el menú principal del programa. Cartelera, snacks, cambiar idioma.
      */
     public void doOperation() throws IOException, CommunicationException {
 

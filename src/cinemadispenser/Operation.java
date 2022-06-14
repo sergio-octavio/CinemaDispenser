@@ -1,9 +1,6 @@
 package cinemadispenser;
 
-import java.util.ArrayList;
-import java.util.List;
 import sienens.CinemaTicketDispenser;
-import urjc.UrjcBankServer;
 
 /**
  * Clase de la que heredan todas las operaciones que se puedan realizar con el

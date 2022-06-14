@@ -1,8 +1,6 @@
 package cinemadispenser;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.naming.CommunicationException;
 import sienens.CinemaTicketDispenser;
 import urjc.UrjcBankServer;
